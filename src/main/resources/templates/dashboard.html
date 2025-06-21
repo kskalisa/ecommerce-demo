@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Dashboard</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+        }
+        body {
+            background: #f4f4f4;
+            min-height: 100vh;
+            color: #222;
+            transition: background 0.3s, color 0.3s;
+        }
+        .layout {
+            display: flex;
+            min-height: 100vh;
+            width: 100vw;
+            overflow-x: hidden;
+        }
+        .sidebar {
+            background: #fff;
+            min-height: 100vh;
+            border-right: 1.5px solid #e0e0e0;
+            width: 220px;
+            position: relative;
+            z-index: 1040;
+            transition: left 0.3s, background 0.3s, color 0.3s;
+        }
+        .sidebar .nav-link {
+            color: #222;
+            font-weight: 500;
+            border-radius: 8px;
+            margin: 4px 0;
+            padding: 12px 20px;
+            display: flex;
+            align-items: center;
+            transition: background 0.2s, color 0.2s;
+        }
+        .sidebar .nav-link.active, .sidebar .nav-link:hover {
+            background: #2563eb;
+            color: #fff;
+        }
+        .sidebar .nav-link i {
+            margin-right: 12px;
+            font-size: 1.2rem;
+        }
+        .sidebar .sidebar-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            padding: 32px 20px 24px 20px;
+            letter-spacing: 1px;
+        }
+        .sidebar .bottom-links {
+            position: absolute;
+            bottom: 32px;
+            width: 100%;
+        }
+        .profile-img {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-right: 10px;
+        }
+        .main-content {
+            flex: 1;
+            min-width: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        .topbar {
+            background: #fff;
+            border-bottom: 1.5px solid #e0e0e0;
+            padding: 18px 32px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            transition: background 0.3s, color 0.3s;
+        }
+        .search-bar {
+            width: 350px;
+            background: #f3f3f3;
+            border: none;
+            border-radius: 8px;
+            padding: 8px 16px;
+            color: inherit;
+        }
+        .dashboard-cards {
+            margin-top: 32px;
+            margin-bottom: 24px;
+        }
+        .dashboard-card {
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px #f0f0f0;
+            padding: 24px 0 16px 0;
+            text-align: center;
+            margin-bottom: 16px;
+            transition: background 0.3s, color 0.3s;
+        }
+        .dashboard-card .icon {
+            color: #2563eb;
+            font-size: 2.2rem;
+            margin-bottom: 8px;
+        }
+        .dashboard-card h4 {
+            font-size: 1.7rem;
+            font-weight: bold;
+            margin-bottom: 2px;
+        }
+        .dashboard-card p {
+            color: #888;
+            font-size: 1.05rem;
+            margin-bottom: 0;
+        }
+        .card-section {
+            margin-bottom: 24px;
+        }
+        .custom-table th, .custom-table td {
+            font-size: 0.98rem;
+            vertical-align: middle;
+        }
+        .progress {
+            height: 8px;
+            border-radius: 4px;
+        }
+        .earnings-card {
+            background: #fff;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 16px;
+            transition: background 0.3s, color 0.3s;
+        }
+        .visitor-card {
+            background: #fff;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 16px;
+            transition: background 0.3s, color 0.3s;
+        }
+        .chart-placeholder {
+            width: 100%;
+            height: 140px;
+            background: linear-gradient(90deg, #e0e7ff 0%, #f1f5f9 100%);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #a5b4fc;
+            font-size: 1.2rem;
+            font-weight: 500;
+            transition: background 0.3s, color 0.3s;
+        }
+        .dark-mode {
+            background: #181a1b !important;
+            color: #e5e7eb !important;
+        }
+        .dark-mode .sidebar {
+            background: #23272b !important;
+            border-right: 1.5px solid #23272b !important;
+            color: #e5e7eb !important;
+        }
+        .dark-mode .sidebar .nav-link {
+            color: #e5e7eb !important;
+        }
+        .dark-mode .sidebar .nav-link.active,
+        .dark-mode .sidebar .nav-link:hover {
+            background: #2563eb !important;
+            color: #fff !important;
+        }
+        .dark-mode .sidebar .sidebar-title {
+            color: #fff !important;
+        }
+        .dark-mode .topbar {
+            background: #23272b !important;
+            border-bottom: 1.5px solid #23272b !important;
+            color: #e5e7eb !important;
+        }
+        .dark-mode .search-bar {
+            background: #23272b !important;
+            color: #e5e7eb !important;
+        }
+        .dark-mode .dashboard-card,
+        .dark-mode .earnings-card,
+        .dark-mode .visitor-card {
+            background: #23272b !important;
+            color: #e5e7eb !important;
+            box-shadow: 0 2px 8px #181a1b;
+        }
+        .dark-mode .dashboard-card p,
+        .dark-mode .earnings-card p,
+        .dark-mode .visitor-card p {
+            color: #b0b3b8 !important;
+        }
+        .dark-mode .custom-table th,
+        .dark-mode .custom-table td {
+            color: #e5e7eb !important;
+        }
+        .dark-mode .chart-placeholder {
+            background: linear-gradient(90deg, #23272b 0%, #181a1b 100%) !important;
+            color: #4f8cff !important;
+        }
+        .dark-mode .progress {
+            background-color: #181a1b !important;
+        }
+        .sidebar-toggle {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.7rem;
+            color: #2563eb;
+            margin-right: 16px;
+        }
+        .sidebar-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.2);
+            z-index: 1039;
+        }
+        .dark-toggle-btn {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: #2563eb;
+            margin-right: 18px;
+            transition: color 0.3s;
+        }
+        .dark-mode .dark-toggle-btn {
+            color: #ffd700;
+        }
+        @media (max-width: 991.98px) {
+            .sidebar {
+                position: fixed;
+                left: -220px;
+                top: 0;
+                height: 100vh;
+            }
+            .sidebar.show {
+                left: 0;
+            }
+            .sidebar-toggle {
+                display: inline-block;
+            }
+            .sidebar-overlay.show {
+                display: block;
+            }
+            .main-content {
+                margin-left: 0 !important;
+            }
+            .topbar {
+                padding: 14px 16px;
+            }
+            .search-bar {
+                width: 100%;
+                min-width: 120px;
+            }
+        }
+        @media (max-width: 767.98px) {
+            .dashboard-cards .col-md-3,
+            .dashboard-cards .col-md-4,
+            .dashboard-cards .col-md-6,
+            .dashboard-cards .col-md-8 {
+                flex: 0 0 100%;
+                max-width: 100%;
+            }
+            .topbar {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+            .profile-img {
+                margin-right: 6px;
+            }
+        }
+        @media (max-width: 575.98px) {
+            .sidebar {
+                width: 100vw;
+                left: -100vw;
+            }
+            .sidebar.show {
+                left: 0;
+            }
+            .sidebar .sidebar-title {
+                padding: 20px 10px 16px 10px;
+                font-size: 1.2rem;
+            }
+            .topbar {
+                padding: 10px 6px;
+            }
+            .dashboard-card {
+                padding: 16px 0 10px 0;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="layout">
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-title">E-Commerce</div>
+        <ul class="nav flex-column px-2">
+            <li class="nav-item">
+                <a class="nav-link active" href="/dashboard">
+                    <i class="bi bi-grid-fill"></i>Dashboard
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/orders">
+                    <i class="bi bi-bag-fill"></i>Orders
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/customers">
+                    <i class="bi bi-people-fill"></i>Customers
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/products">
+                    <i class="bi bi-box-seam"></i>Product
+                </a>
+            </li>
+        </ul>
+        <div class="bottom-links px-2">
+            <ul class="nav flex-column">
+                <li class="nav-item">
+                    <a class="nav-link" href="#"><i class="bi bi-gear-fill"></i>Settings</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#"><i class="bi bi-box-arrow-right"></i>Logout</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+    <!-- Main content -->
+    <div class="main-content" id="mainContent">
+        <!-- Topbar -->
+        <div class="topbar">
+            <div class="d-flex align-items-center">
+                <button class="sidebar-toggle" id="sidebarToggle"><i class="bi bi-list"></i></button>
+                <button class="dark-toggle-btn" id="darkToggleBtn" title="Toggle dark mode">
+                    <i class="bi bi-moon"></i>
+                </button>
+            </div>
+            <input type="text" class="search-bar" placeholder="Search...">
+            <div class="d-flex align-items-center">
+                <i class="bi bi-bell fs-5 me-4"></i>
+                <img th:src="@{/img/profile-hero.png}" class="profile-img" alt="Profile">
+                <span style="font-weight: 500;">Kalisa</span>
+            </div>
+        </div>
+        <div class="container-fluid">
+            <!-- Dashboard Cards -->
+            <div class="row dashboard-cards">
+                <div class="col-12 col-sm-6 col-md-3">
+                    <div class="dashboard-card">
+                        <div class="icon"><i class="bi bi-people-fill"></i></div>
+                        <h4>200+</h4>
+                        <p>Total Customers</p>
+                    </div>
+                </div>
+                <div class="col-12 col-sm-6 col-md-3">
+                    <div class="dashboard-card">
+                        <div class="icon"><i class="bi bi-box-seam"></i></div>
+                        <h4>200+</h4>
+                        <p>Total Products</p>
+                    </div>
+                </div>
+                <div class="col-12 col-sm-6 col-md-3">
+                    <div class="dashboard-card">
+                        <div class="icon"><i class="bi bi-people-fill"></i></div>
+                        <h4>200+</h4>
+                        <p>Total Customers</p>
+                    </div>
+                </div>
+                <div class="col-12 col-sm-6 col-md-3">
+                    <div class="dashboard-card">
+                        <div class="icon"><i class="bi bi-people-fill"></i></div>
+                        <h4>200+</h4>
+                        <p>Total Customers</p>
+                    </div>
+                </div>
+            </div>
+            <!-- Main Section -->
+            <div class="row card-section">
+                <div class="col-12 col-md-6">
+                    <div class="earnings-card mb-3">
+                        <h6 class="mb-3" style="font-weight: 600;">Top Products</h6>
+                        <div class="table-responsive">
+                            <table class="table custom-table mb-0">
+                                <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Name</th>
+                                    <th>Popularity</th>
+                                    <th>Sales</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td>01</td>
+                                    <td>Hero Dance Range</td>
+                                    <td>
+                                        <div class="progress">
+                                            <div class="progress-bar bg-primary" style="width: 60%"></div>
+                                        </div>
+                                    </td>
+                                    <td>46%</td>
+                                </tr>
+                                <tr>
+                                    <td>02</td>
+                                    <td>Daisy Princess Dress</td>
+                                    <td>
+                                        <div class="progress">
+                                            <div class="progress-bar bg-info" style="width: 30%"></div>
+                                        </div>
+                                    </td>
+                                    <td>19%</td>
+                                </tr>
+                                <tr>
+                                    <td>03</td>
+                                    <td>Bathroom Essentials</td>
+                                    <td>
+                                        <div class="progress">
+                                            <div class="progress-bar bg-warning" style="width: 15%"></div>
+                                        </div>
+                                    </td>
+                                    <td>14%</td>
+                                </tr>
+                                <tr>
+                                    <td>04</td>
+                                    <td>Apple Smartwatch</td>
+                                    <td>
+                                        <div class="progress">
+                                            <div class="progress-bar bg-secondary" style="width: 10%"></div>
+                                        </div>
+                                    </td>
+                                    <td>9%</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 col-md-6">
+                    <div class="earnings-card mb-3">
+                        <h6 class="mb-3" style="font-weight: 600;">Customer Fulfillment</h6>
+                        <div class="chart-placeholder">[ Chart Placeholder ]</div>
+                        <div class="d-flex justify-content-between mt-2 px-1" style="font-size: 0.98rem;">
+                            <span class="text-muted">Last Month<br><b>6,027</b></span>
+                            <span class="text-muted">This Month<br><b>8,566</b></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row card-section">
+                <div class="col-12 col-md-4">
+                    <div class="earnings-card">
+                        <h6 style="font-weight: 600;">Earnings</h6>
+                        <h3 style="font-weight: bold; color: #2563eb;">$6078.76</h3>
+                        <p class="text-muted mb-2">That's 40% more than last month</p>
+                        <div class="progress mb-1" style="height: 10px;">
+                            <div class="progress-bar bg-success" style="width: 80%"></div>
+                        </div>
+                        <span class="text-muted" style="font-size: 0.95rem;">80%</span>
+                    </div>
+                </div>
+                <div class="col-12 col-md-8">
+                    <div class="visitor-card">
+                        <h6 style="font-weight: 600;">Visitor Insights</h6>
+                        <div class="chart-placeholder">[ Visitor Chart Placeholder ]</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Sidebar and dark mode toggle script -->
+<script>
+    const sidebar = document.getElementById('sidebar');
+    const sidebarToggle = document.getElementById('sidebarToggle');
+    const sidebarOverlay = document.getElementById('sidebarOverlay');
+    const darkToggleBtn = document.getElementById('darkToggleBtn');
+    const body = document.body;
+
+    // Sidebar toggle
+    function openSidebar() {
+        sidebar.classList.add('show');
+        sidebarOverlay.classList.add('show');
+    }
+    function closeSidebar() {
+        sidebar.classList.remove('show');
+        sidebarOverlay.classList.remove('show');
+    }
+    sidebarToggle && sidebarToggle.addEventListener('click', function(e) {
+        e.stopPropagation();
+        openSidebar();
+    });
+    sidebarOverlay && sidebarOverlay.addEventListener('click', function() {
+        closeSidebar();
+    });
+    window.addEventListener('resize', function() {
+        if(window.innerWidth >= 992) {
+            closeSidebar();
+        }
+    });
+
+    // Dark mode toggle
+    function setDarkMode(on) {
+        if(on) {
+            body.classList.add('dark-mode');
+            darkToggleBtn.innerHTML = '<i class="bi bi-sun"></i>';
+            localStorage.setItem('darkMode', 'on');
+        } else {
+            body.classList.remove('dark-mode');
+            darkToggleBtn.innerHTML = '<i class="bi bi-moon"></i>';
+            localStorage.setItem('darkMode', 'off');
+        }
+    }
+    if(localStorage.getItem('darkMode') === 'on' ||
+        (localStorage.getItem('darkMode') === null && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+        setDarkMode(true);
+    } else {
+        setDarkMode(false);
+    }
+    darkToggleBtn && darkToggleBtn.addEventListener('click', function() {
+        setDarkMode(!body.classList.contains('dark-mode'));
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Products</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+        }
+        body {
+            background: #f4f4f4;
+            min-height: 100vh;
+            color: #222;
+            transition: background 0.3s, color 0.3s;
+        }
+        .layout {
+            display: flex;
+            min-height: 100vh;
+            width: 100vw;
+            overflow-x: hidden;
+        }
+        .sidebar {
+            background: #fff;
+            min-height: 100vh;
+            border-right: 1.5px solid #e0e0e0;
+            width: 220px;
+            position: relative;
+            z-index: 1040;
+            transition: left 0.3s, background 0.3s, color 0.3s;
+        }
+        .sidebar .nav-link {
+            color: #222;
+            font-weight: 500;
+            border-radius: 8px;
+            margin: 4px 0;
+            padding: 12px 20px;
+            display: flex;
+            align-items: center;
+            transition: background 0.2s, color 0.2s;
+        }
+        .sidebar .nav-link.active, .sidebar .nav-link:hover {
+            background: #2563eb;
+            color: #fff;
+        }
+        .sidebar .nav-link i {
+            margin-right: 12px;
+            font-size: 1.2rem;
+        }
+        .sidebar .sidebar-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            padding: 32px 20px 24px 20px;
+            letter-spacing: 1px;
+        }
+        .sidebar .bottom-links {
+            position: absolute;
+            bottom: 32px;
+            width: 100%;
+        }
+        .profile-img {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-right: 10px;
+        }
+        .main-content {
+            flex: 1;
+            min-width: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        .topbar {
+            background: #fff;
+            border-bottom: 1.5px solid #e0e0e0;
+            padding: 18px 32px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            transition: background 0.3s, color 0.3s;
+        }
+        .search-bar {
+            width: 350px;
+            background: #f3f3f3;
+            border: none;
+            border-radius: 8px;
+            padding: 8px 16px;
+            color: inherit;
+        }
+        .product-filters-row {
+            margin: 32px 0 18px 0;
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px #f0f0f0;
+            padding: 16px 18px;
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .product-filters-row .form-control,
+        .product-filters-row .form-select {
+            border-radius: 8px;
+            background: #f3f3f3;
+            border: none;
+            min-width: 150px;
+            max-width: 180px;
+        }
+        .product-filters-row .btn {
+            border-radius: 8px;
+            font-size: 0.98rem;
+            padding: 8px 18px;
+        }
+        .product-filters-row .btn-add {
+            background: #2563eb;
+            color: #fff;
+            font-weight: 500;
+            margin-left: auto;
+        }
+        .product-filters-row .btn-add:hover {
+            background: #1746a2;
+        }
+        .product-filters-row .btn-filter {
+            background: #fff;
+            color: #222;
+            border: 1px solid #e0e0e0;
+        }
+        .product-filters-row .btn-filter:hover {
+            background: #f3f3f3;
+        }
+        .product-table th, .product-table td {
+            vertical-align: middle;
+            font-size: 0.98rem;
+        }
+        .product-table th {
+            color: #888;
+            font-weight: 600;
+        }
+        .product-table .product-img {
+            width: 38px;
+            height: 38px;
+            object-fit: cover;
+            border-radius: 6px;
+            margin-right: 10px;
+        }
+        .product-table .status-select {
+            border-radius: 20px;
+            padding: 2px 16px;
+            font-size: 0.98rem;
+            font-weight: 500;
+            border: 1px solid #e0e0e0;
+            background: #e8f7ee;
+            color: #22c55e;
+        }
+        .product-table .status-select.inactive {
+            background: #fbeee6;
+            color: #f59e42;
+        }
+        .product-table .btn-edit {
+            background: #2563eb;
+            color: #fff;
+            border-radius: 8px;
+            padding: 6px 18px;
+            font-weight: 500;
+            margin-right: 6px;
+        }
+        .product-table .btn-edit:hover {
+            background: #1746a2;
+        }
+        .product-table .btn-delete {
+            background: #fff;
+            color: #ef4444;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 6px 12px;
+        }
+        .product-table .btn-delete:hover {
+            background: #fbeee6;
+        }
+        /* Modal dark mode */
+        .dark-mode .modal-content {
+            background: #23272b;
+            color: #e5e7eb;
+        }
+        .dark-mode .modal-header,
+        .dark-mode .modal-footer {
+            border-color: #333;
+        }
+        .dark-mode .modal-title {
+            color: #fff;
+        }
+        .dark-mode .form-control,
+        .dark-mode .form-select {
+            background: #181a1b;
+            color: #e5e7eb;
+            border-color: #333;
+        }
+        .dark-mode .form-control::placeholder {
+            color: #b0b3b8;
+        }
+        .dark-mode .btn-close {
+            filter: invert(1);
+        }
+        .dark-mode {
+            background: #181a1b !important;
+            color: #e5e7eb !important;
+        }
+        .dark-mode .sidebar {
+            background: #23272b !important;
+            border-right: 1.5px solid #23272b !important;
+            color: #e5e7eb !important;
+        }
+        .dark-mode .sidebar .nav-link {
+            color: #e5e7eb !important;
+        }
+        .dark-mode .sidebar .nav-link.active,
+        .dark-mode .sidebar .nav-link:hover {
+            background: #2563eb !important;
+            color: #fff !important;
+        }
+        .dark-mode .sidebar .sidebar-title {
+            color: #fff !important;
+        }
+        .dark-mode .topbar {
+            background: #23272b !important;
+            border-bottom: 1.5px solid #23272b !important;
+            color: #e5e7eb !important;
+        }
+        .dark-mode .search-bar,
+        .dark-mode .product-filters-row .form-control,
+        .dark-mode .product-filters-row .form-select {
+            background: #23272b !important;
+            color: #e5e7eb !important;
+        }
+        .dark-mode .product-filters-row {
+            background: #23272b;
+            box-shadow: 0 2px 8px #181a1b;
+        }
+        .dark-mode .product-filters-row .btn-filter {
+            background: #23272b;
+            color: #e5e7eb;
+            border: 1px solid #333;
+        }
+        .dark-mode .product-filters-row .btn-add {
+            background: #2563eb;
+            color: #fff;
+        }
+        .dark-mode .product-table {
+            background-color: #23272b !important;
+            color: #e5e7eb !important;
+        }
+        .dark-mode .product-table th,
+        .dark-mode .product-table td {
+            background-color: #23272b !important;
+            color: #e5e7eb !important;
+            border-color: #333 !important;
+        }
+        .dark-mode .product-table tr {
+            background-color: #23272b !important;
+        }
+        .dark-mode .product-table tbody tr:hover {
+            background-color: #181a1b !important;
+        }
+        .dark-mode .product-table .status-select {
+            background: #1e2b23 !important;
+            color: #22c55e !important;
+            border: 1px solid #333 !important;
+        }
+        .dark-mode .product-table .status-select.inactive {
+            background: #2b2321 !important;
+            color: #f59e42 !important;
+        }
+        .dark-mode .product-table .btn-edit {
+            background: #2563eb;
+            color: #fff;
+        }
+        .dark-mode .product-table .btn-delete {
+            background: #23272b;
+            color: #ef4444;
+            border: 1px solid #333;
+        }
+        .sidebar-toggle {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.7rem;
+            color: #2563eb;
+            margin-right: 16px;
+        }
+        .sidebar-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.2);
+            z-index: 1039;
+        }
+        .dark-toggle-btn {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: #2563eb;
+            margin-right: 18px;
+            transition: color 0.3s;
+        }
+        .dark-mode .dark-toggle-btn {
+            color: #ffd700;
+        }
+        @media (max-width: 991.98px) {
+            .sidebar {
+                position: fixed;
+                left: -220px;
+                top: 0;
+                height: 100vh;
+            }
+            .sidebar.show {
+                left: 0;
+            }
+            .sidebar-toggle {
+                display: inline-block;
+            }
+            .sidebar-overlay.show {
+                display: block;
+            }
+            .main-content {
+                margin-left: 0 !important;
+            }
+            .topbar {
+                padding: 14px 16px;
+            }
+            .search-bar {
+                width: 100%;
+                min-width: 120px;
+            }
+        }
+        @media (max-width: 767.98px) {
+            .topbar {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+            .profile-img {
+                margin-right: 6px;
+            }
+            .product-filters-row {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 8px;
+            }
+        }
+        @media (max-width: 575.98px) {
+            .sidebar {
+                width: 100vw;
+                left: -100vw;
+            }
+            .sidebar.show {
+                left: 0;
+            }
+            .sidebar .sidebar-title {
+                padding: 20px 10px 16px 10px;
+                font-size: 1.2rem;
+            }
+            .topbar {
+                padding: 10px 6px;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="layout">
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-title">E-Commerce</div>
+        <ul class="nav flex-column px-2">
+            <li class="nav-item">
+                <a class="nav-link" href="/dashboard">
+                    <i class="bi bi-grid-fill"></i>Dashboard
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/orders">
+                    <i class="bi bi-bag-fill"></i>Orders
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/customers">
+                    <i class="bi bi-people-fill"></i>Customers
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link active" href="/products">
+                    <i class="bi bi-box-seam"></i>Product
+                </a>
+            </li>
+        </ul>
+        <div class="bottom-links px-2">
+            <ul class="nav flex-column">
+                <li class="nav-item">
+                    <a class="nav-link" href="#"><i class="bi bi-gear-fill"></i>Settings</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#"><i class="bi bi-box-arrow-right"></i>Logout</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+    <!-- Main content -->
+    <div class="main-content" id="mainContent">
+        <!-- Topbar -->
+        <div class="topbar">
+            <div class="d-flex align-items-center">
+                <button class="sidebar-toggle" id="sidebarToggle"><i class="bi bi-list"></i></button>
+                <button class="dark-toggle-btn" id="darkToggleBtn" title="Toggle dark mode">
+                    <i class="bi bi-moon"></i>
+                </button>
+            </div>
+            <input type="text" class="search-bar" placeholder="Search...">
+            <div class="d-flex align-items-center">
+                <i class="bi bi-bell fs-5 me-4"></i>
+                <img src="/img/profile-hero.png" class="profile-img" alt="Profile">
+                <span style="font-weight: 500;">Kalisa</span>
+            </div>
+        </div>
+        <div class="container-fluid">
+            <!-- Product Filters Row -->
+            <div class="product-filters-row mb-3">
+                <input type="text" class="form-control me-2" placeholder="Search product">
+                <select class="form-select me-2" style="min-width:120px;">
+                    <option>All Product</option>
+                    <option>Jackets</option>
+                    <option>Shoes</option>
+                </select>
+                <select class="form-select me-2" style="min-width:120px;">
+                    <option>Default</option>
+                    <option>Price: Low to High</option>
+                    <option>Price: High to Low</option>
+                </select>
+                <button class="btn btn-filter me-2"><i class="bi bi-funnel"></i> Filter</button>
+                <button class="btn btn-add ms-auto" data-bs-toggle="modal" data-bs-target="#productModal">
+                    <i class="bi bi-plus-lg me-2"></i>Add product
+                </button>
+            </div>
+            <!-- Category/Status/Price/Warehouse Filters -->
+            <div class="row mb-4 g-2">
+                <div class="col-12 col-sm-6 col-md-3">
+                    <select class="form-select">
+                        <option>Category</option>
+                        <option>Jackets</option>
+                        <option>Shoes</option>
+                    </select>
+                </div>
+                <div class="col-12 col-sm-6 col-md-3">
+                    <select class="form-select">
+                        <option>All Status</option>
+                        <option>Active</option>
+                        <option>Inactive</option>
+                    </select>
+                </div>
+                <div class="col-12 col-sm-6 col-md-3">
+                    <select class="form-select">
+                        <option>$50 - $100</option>
+                        <option>$100 - $200</option>
+                    </select>
+                </div>
+                <div class="col-12 col-sm-6 col-md-3">
+                    <select class="form-select">
+                        <option>All Store</option>
+                        <option>Warehouse 1</option>
+                        <option>Warehouse 2</option>
+                    </select>
+                </div>
+            </div>
+            <!-- Products Table -->
+            <div class="table-responsive">
+                <table class="table product-table">
+                    <thead>
+                    <tr>
+                        <th>Product Name</th>
+                        <th>Purchase Unit Price</th>
+                        <th>Products</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <!-- Example rows, repeat or use Thymeleaf th:each for dynamic data -->
+                    <tr>
+                        <td>
+                            <div class="d-flex align-items-center">
+                                <img src="https://img.icons8.com/ios-filled/50/000000/jumper.png" class="product-img" alt="Sweater">
+                                <div>
+                                    <div style="font-weight:600;">Sweater</div>
+                                    <div style="font-size:0.92rem; color:#888;">Warm clothing</div>
+                                </div>
+                            </div>
+                        </td>
+                        <td>$100.0</td>
+                        <td>4500</td>
+                        <td>
+                            <select class="status-select">
+                                <option selected>Active</option>
+                                <option class="inactive">Inactive</option>
+                            </select>
+                        </td>
+                        <td>
+                            <button class="btn btn-edit"><i class="bi bi-pencil"></i> Edit</button>
+                            <button class="btn btn-delete"><i class="bi bi-trash"></i></button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="d-flex align-items-center">
+                                <img src="https://img.icons8.com/ios-filled/50/000000/jumper.png" class="product-img" alt="Sweater">
+                                <div>
+                                    <div style="font-weight:600;">Sweater</div>
+                                    <div style="font-size:0.92rem; color:#888;">Warm clothing</div>
+                                </div>
+                            </div>
+                        </td>
+                        <td>$100.0</td>
+                        <td>4500</td>
+                        <td>
+                            <select class="status-select inactive">
+                                <option>Active</option>
+                                <option selected class="inactive">Inactive</option>
+                            </select>
+                        </td>
+                        <td>
+                            <button class="btn btn-edit"><i class="bi bi-pencil"></i> Edit</button>
+                            <button class="btn btn-delete"><i class="bi bi-trash"></i></button>
+                        </td>
+                    </tr>
+                    <!-- Add more rows as needed -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Add/Edit Product Modal -->
+<div class="modal fade" id="productModal" tabindex="-1" aria-labelledby="productModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="productModalLabel">Add Product</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="productName" class="form-label">Product Name</label>
+                        <input type="text" class="form-control" id="productName" placeholder="Enter product name">
+                    </div>
+                    <div class="mb-3">
+                        <label for="productDesc" class="form-label">Description</label>
+                        <input type="text" class="form-control" id="productDesc" placeholder="Enter description">
+                    </div>
+                    <div class="mb-3">
+                        <label for="productPrice" class="form-label">Purchase Unit Price</label>
+                        <input type="number" class="form-control" id="productPrice" placeholder="$0.00">
+                    </div>
+                    <div class="mb-3">
+                        <label for="productStatus" class="form-label">Status</label>
+                        <select class="form-select" id="productStatus">
+                            <option selected>Active</option>
+                            <option>Inactive</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="productImage" class="form-label">Image</label>
+                        <input type="file" class="form-control" id="productImage">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save Product</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Sidebar and dark mode toggle script -->
+<script>
+    const sidebar = document.getElementById('sidebar');
+    const sidebarToggle = document.getElementById('sidebarToggle');
+    const sidebarOverlay = document.getElementById('sidebarOverlay');
+    const darkToggleBtn = document.getElementById('darkToggleBtn');
+    const body = document.body;
+
+    // Sidebar toggle
+    function openSidebar() {
+        sidebar.classList.add('show');
+        sidebarOverlay.classList.add('show');
+    }
+    function closeSidebar() {
+        sidebar.classList.remove('show');
+        sidebarOverlay.classList.remove('show');
+    }
+    sidebarToggle && sidebarToggle.addEventListener('click', function(e) {
+        e.stopPropagation();
+        openSidebar();
+    });
+    sidebarOverlay && sidebarOverlay.addEventListener('click', function() {
+        closeSidebar();
+    });
+    window.addEventListener('resize', function() {
+        if(window.innerWidth >= 992) {
+            closeSidebar();
+        }
+    });
+
+    // Dark mode toggle
+    function setDarkMode(on) {
+        if(on) {
+            body.classList.add('dark-mode');
+            darkToggleBtn.innerHTML = '<i class="bi bi-sun"></i>';
+            localStorage.setItem('darkMode', 'on');
+        } else {
+            body.classList.remove('dark-mode');
+            darkToggleBtn.innerHTML = '<i class="bi bi-moon"></i>';
+            localStorage.setItem('darkMode', 'off');
+        }
+    }
+    if(localStorage.getItem('darkMode') === 'on' ||
+        (localStorage.getItem('darkMode') === null && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+        setDarkMode(true);
+    } else {
+        setDarkMode(false);
+    }
+    darkToggleBtn && darkToggleBtn.addEventListener('click', function() {
+        setDarkMode(!body.classList.contains('dark-mode'));
+    });
+</script>
+<!-- Bootstrap JS for modal and dropdowns -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
