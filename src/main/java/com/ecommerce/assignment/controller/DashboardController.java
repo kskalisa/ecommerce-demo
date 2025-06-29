@@ -21,7 +21,7 @@ public class DashboardController {
         return "customers";
     }
 
-    @GetMapping("/products")
+    @GetMapping("/product-dashboard")
     public String products(){
         return "products";
     }

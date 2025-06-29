@@ -1,31 +1,22 @@
 package com.ecommerce.assignment.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.ecommerce.assignment.base.AbstractBaseEntity;
+import com.ecommerce.assignment.util.EStockState;
+import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity
-public class Product {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    private String name;
-    private int popularity;
-    private int sales;
+@Getter
+@Setter
+public class Product extends AbstractBaseEntity {
+    private String productName;
+    private String description;
+    private String category;
+    private double price;
+    private int quantity;
+    private String image;
 
-    public Product(String name, int popularity, int sales) {
-        this.name = name;
-        this.popularity = popularity;
-        this.sales = sales;
-    }
-
-    public Product() {
-    }
+    @Enumerated(EnumType.STRING)
+    private EStockState stockState;
 }
-
-
-
-
-
-
