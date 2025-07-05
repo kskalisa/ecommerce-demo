@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Details - Airpods Max</title>
+    <link rel="stylesheet" href="/static/css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+</head>
+<body>
+<!-- Top Navigation Bar -->
+<header class="navbar">
+    <div class="navbar-left">
+        <span class="logo">E-Commerce</span>
+        <nav>
+            <a href="index.html">Home</a>
+            <a href="#">Categories</a>
+            <a href="#">Deals</a>
+            <a href="#">What's New</a>
+            <a href="#">Delivery</a>
+        </nav>
+    </div>
+    <div class="navbar-right">
+        <a href="account.html">Account</a>
+        <a href="cart.html">Cart</a>
+    </div>
+</header>
+
+<!-- Breadcrumb -->
+<div class="breadcrumb" style="margin-bottom: 0;">
+    <a href="index.html">Home</a> / <a href="#">Headphones</a> / Airpods Max
+</div>
+
+<!-- Product Details Section -->
+<section class="product-details-section card" style="margin-top: 1.5rem;">
+    <div class="product-details-image">
+        <img src="/static/img/airpods-max.png" alt="Airpods Max">
+    </div>
+    <div class="product-details-info">
+        <h2>Airpods - Max</h2>
+        <div style="margin: 0.5rem 0 1rem 0; color: #888; font-size: 1rem;">Wireless Over-Ear Headphones</div>
+        <div style="display: flex; align-items: center; gap: 1.5rem; margin-bottom: 1rem;">
+            <span class="stars" style="color: #ffc107; font-size: 1.2rem;">★★★★★</span>
+            <span style="color: #1976d2; font-weight: 500;">4.9</span>
+            <span style="color: #888;">(1,200 reviews)</span>
+        </div>
+        <div style="font-size: 1.5rem; font-weight: bold; color: #1976d2; margin-bottom: 1rem;">$549.00</div>
+        <div style="margin-bottom: 1.2rem; color: #444;">Experience high-fidelity audio with Airpods Max. Active Noise Cancellation, Transparency mode, and spatial audio for immersive sound. Up to 20 hours of listening time.</div>
+        <div style="display: flex; align-items: center; gap: 1.2rem; margin-bottom: 1.2rem;">
+            <label for="quantity" style="font-weight: 500;">Quantity:</label>
+            <div class="quantity-selector">
+                <button class="qty-btn" onclick="decrementQty()">-</button>
+                <input id="quantity" type="number" value="1" min="1">
+                <button class="qty-btn" onclick="incrementQty()">+</button>
+            </div>
+        </div>
+        <div style="display: flex; gap: 1rem;">
+            <a href="checkout.html" class="btn-primary" style="min-width: 120px; text-align:center;">Buy Now</a>
+            <a href="cart.html" class="add-cart" style="min-width: 120px; text-align:center;">Add to Cart</a>
+        </div>
+        <div style="margin-top: 1.5rem; color: #888; font-size: 0.98rem;">
+            <span>Free Delivery</span> &nbsp;|&nbsp; <span>30-Day Return</span> &nbsp;|&nbsp; <span>1 Year Warranty</span>
+        </div>
+    </div>
+</section>
+
+<!-- Similar Items You Might Like -->
+<section class="products">
+    <h3>Similar Items You might Like</h3>
+    <div class="product-grid">
+        <div class="product-card">
+            <a href="product-details.html"><img src="/static/img/laptop.png" alt="Laptop"></a>
+            <div class="product-info">
+                <div>Wireless Earbuds, IPX8</div>
+                <small>3000+ orders, 4.9 (1200)</small>
+                <div class="stars">★★★★★</div>
+                <a href="cart.html" class="add-cart">Add to Cart</a>
+            </div>
+        </div>
+        <div class="product-card">
+            <a href="product-details.html"><img src="/static/img/earbuds.png" alt="Wireless Earbuds, IPX8"></a>
+            <div class="product-info">
+                <div>Wireless Earbuds, IPX8</div>
+                <small>3000+ orders, 4.9 (1200)</small>
+                <div class="stars">★★★★★</div>
+                <a href="cart.html" class="add-cart">Add to Cart</a>
+            </div>
+        </div>
+        <div class="product-card">
+            <a href="product-details.html"><img src="/static/img/earbuds.png" alt="Wireless Earbuds, IPX8"></a>
+            <div class="product-info">
+                <div>Wireless Earbuds, IPX8</div>
+                <small>3000+ orders, 4.9 (1200)</small>
+                <div class="stars">★★★★★</div>
+                <a href="cart.html" class="add-cart">Add to Cart</a>
+            </div>
+        </div>
+        <div class="product-card">
+            <a href="product-details.html"><img src="/static/img/earbuds.png" alt="Wireless Earbuds, IPX8"></a>
+            <div class="product-info">
+                <div>Wireless Earbuds, IPX8</div>
+                <small>3000+ orders, 4.9 (1200)</small>
+                <div class="stars">★★★★★</div>
+                <a href="cart.html" class="add-cart">Add to Cart</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Recently Viewed -->
+<section class="products">
+    <h3>Recently Viewed</h3>
+    <div class="product-grid">
+        <div class="product-card">
+            <a href="product-details.html"><img src="/static/img/laptop.png" alt="Laptop"></a>
+            <div class="product-info">
+                <div>Wireless Earbuds, IPX8</div>
+                <small>3000+ orders, 4.9 (1200)</small>
+                <div class="stars">★★★★★</div>
+                <a href="cart.html" class="add-cart">Add to Cart</a>
+            </div>
+        </div>
+        <div class="product-card">
+            <a href="product-details.html"><img src="/static/img/earbuds.png" alt="Wireless Earbuds, IPX8"></a>
+            <div class="product-info">
+                <div>Wireless Earbuds, IPX8</div>
+                <small>3000+ orders, 4.9 (1200)</small>
+                <div class="stars">★★★★★</div>
+                <a href="cart.html" class="add-cart">Add to Cart</a>
+            </div>
+        </div>
+        <div class="product-card">
+            <a href="product-details.html"><img src="/static/img/earbuds.png" alt="Wireless Earbuds, IPX8"></a>
+            <div class="product-info">
+                <div>Wireless Earbuds, IPX8</div>
+                <small>3000+ orders, 4.9 (1200)</small>
+                <div class="stars">★★★★★</div>
+                <a href="cart.html" class="add-cart">Add to Cart</a>
+            </div>
+        </div>
+        <div class="product-card">
+            <a href="product-details.html"><img src="/static/img/earbuds.png" alt="Wireless Earbuds, IPX8"></a>
+            <div class="product-info">
+                <div>Wireless Earbuds, IPX8</div>
+                <small>3000+ orders, 4.9 (1200)</small>
+                <div class="stars">★★★★★</div>
+                <a href="cart.html" class="add-cart">Add to Cart</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<footer style="text-align:center;padding:2rem 0 1rem 0;color:#888;font-size:0.98rem;">
+    &copy; 2025 E-Commerce. All rights reserved.
+</footer>
+<script src="/static/js/scripts.js"></script>
+<script>
+    function incrementQty() {
+        var qty = document.getElementById('quantity');
+        qty.value = parseInt(qty.value) + 1;
+    }
+    function decrementQty() {
+        var qty = document.getElementById('quantity');
+        if (parseInt(qty.value) > 1) {
+            qty.value = parseInt(qty.value) - 1;
+        }
+    }
+</script>
+</body>
+</html>

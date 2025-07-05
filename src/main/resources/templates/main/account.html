@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Account</title>
+    <link rel="stylesheet" href="/css/styles.css">
+    <!-- Font Awesome CDN for sidebar icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+</head>
+<body>
+<!-- Top Navigation Bar -->
+<header class="navbar">
+    <div class="navbar-left">
+        <span class="logo">E-Commerce</span>
+        <nav>
+            <a href="index.html">Home</a>
+            <a href="#">Categories</a>
+            <a href="#">Deals</a>
+            <a href="#">What's New</a>
+            <a href="#">Delivery</a>
+        </nav>
+    </div>
+    <div class="navbar-right">
+        <a href="account.html" class="active">Account</a>
+        <a href="cart.html">Cart</a>
+    </div>
+</header>
+
+<!-- Breadcrumb -->
+<div class="breadcrumb" style="margin-bottom: 0;">
+    <a href="index.html">Homepage</a> / <a href="account.html">My Account</a>
+</div>
+
+<main class="account-main-v2">
+    <div class="account-layout">
+        <!-- Sidebar -->
+        <aside class="account-sidebar">
+            <ul>
+                <li class="active"><span class="sidebar-icon"><i class="fa-solid fa-user"></i></span> <a href="#" style="color:inherit;text-decoration:none;">My details</a></li>
+                <li><span class="sidebar-icon"><i class="fa-solid fa-address-book"></i></span> <a href="#" style="color:inherit;text-decoration:none;">My address book</a></li>
+                <li><span class="sidebar-icon"><i class="fa-solid fa-box"></i></span> <a href="#orders" style="color:inherit;text-decoration:none;">My orders</a></li>
+                <li><span class="sidebar-icon"><i class="fa-solid fa-envelope"></i></span> <a href="#" style="color:inherit;text-decoration:none;">My newsletters</a></li>
+                <li><span class="sidebar-icon"><i class="fa-solid fa-cog"></i></span> <a href="#" style="color:inherit;text-decoration:none;">Account settings</a></li>
+            </ul>
+        </aside>
+        <!-- Main Content -->
+        <section class="account-content-box">
+            <h1>My Account</h1>
+            <div class="account-details-box card">
+                <h2>My details</h2>
+                <div class="account-section">
+                    <h3>Personal Information</h3>
+                    <p class="account-desc">Assertively utilize adaptive customer service for future-proof platforms. Completely drive optimal markets.</p>
+                    <form class="account-details-form">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>First Name</label>
+                                <input type="text" value="Mateusz">
+                            </div>
+                            <div class="form-group">
+                                <label>Second Name</label>
+                                <input type="text" value="Wierzbicki">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Birth Date</label>
+                                <input type="text" placeholder="dd/mm/yy">
+                            </div>
+                            <div class="form-group">
+                                <label>Phone Number</label>
+                                <input type="text" value="123456789">
+                                <small class="form-hint">Keep 9 digit format with no spaces and dashes.</small>
+                            </div>
+                        </div>
+                        <button type="button" class="account-save-btn" onclick="alert('Saved!')">Save</button>
+                    </form>
+                </div>
+                <!-- Order History Section -->
+                <div class="account-section" id="orders">
+                    <h3 style="display:flex;align-items:center;gap:0.5rem;"><i class="fa-solid fa-box"></i> Order History</h3>
+                    <p class="account-desc">View your recent orders and their status.</p>
+                    <div class="order-history-table-wrapper">
+                        <table class="order-history-table">
+                            <thead>
+                            <tr>
+                                <th>Order ID</th>
+                                <th>Date</th>
+                                <th>Status</th>
+                                <th>Total</th>
+                                <th>Action</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td>#1001</td>
+                                <td>2024-05-01</td>
+                                <td><span class="order-status shipped">Shipped</span></td>
+                                <td>$205.00</td>
+                                <td><button class="add-cart" style="padding:0.4rem 1.2rem;font-size:0.95rem;" onclick="alert('Order details for #1001')">View Details</button></td>
+                            </tr>
+                            <tr>
+                                <td>#1000</td>
+                                <td>2024-04-15</td>
+                                <td><span class="order-status delivered">Delivered</span></td>
+                                <td>$549.00</td>
+                                <td><button class="add-cart" style="padding:0.4rem 1.2rem;font-size:0.95rem;" onclick="alert('Order details for #1000')">View Details</button></td>
+                            </tr>
+                            <tr>
+                                <td>#0999</td>
+                                <td>2024-03-28</td>
+                                <td><span class="order-status cancelled">Cancelled</span></td>
+                                <td>$120.00</td>
+                                <td><button class="add-cart" style="padding:0.4rem 1.2rem;font-size:0.95rem;" onclick="alert('Order details for #0999')">View Details</button></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <!-- End Order History Section -->
+                <div class="account-section">
+                    <h3>E-mail address</h3>
+                    <p class="account-desc">Assertively utilize adaptive customer service for future-proof platforms. Completely drive optimal markets.</p>
+                    <form class="account-details-form">
+                        <div class="form-group" style="max-width: 340px;">
+                            <label>E-mail address</label>
+                            <input type="email" value="email@example.pl">
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </div>
+</main>
+<footer style="text-align:center;padding:2rem 0 1rem 0;color:#888;font-size:0.98rem;">
+    &copy; 2025 E-Commerce. All rights reserved.
+</footer>
+<script src="/js/scripts.js"></script>
+</body>
+</html>

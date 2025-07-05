@@ -12,10 +12,14 @@ import lombok.Setter;
 public class Product extends AbstractBaseEntity {
     private String productName;
     private String description;
-    private String category;
     private double price;
     private int quantity;
     private String image;
+
+
+    @ManyToOne
+    @JoinColumn(name = "category_id")
+    private Category category;
 
     @Enumerated(EnumType.STRING)
     private EStockState stockState;

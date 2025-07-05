@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Cart</title>
+    <link rel="stylesheet" href="/static/css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+</head>
+<body>
+<!-- Top Navigation Bar -->
+<header class="navbar">
+    <div class="navbar-left">
+        <span class="logo">E-Commerce</span>
+        <nav>
+            <a href="index.html">Home</a>
+            <a href="#">Categories</a>
+            <a href="#">Deals</a>
+            <a href="#">What's New</a>
+            <a href="#">Delivery</a>
+        </nav>
+    </div>
+    <div class="navbar-right">
+        <a href="account.html">Account</a>
+        <a href="cart.html" class="active">Cart</a>
+    </div>
+</header>
+
+<!-- Breadcrumb -->
+<div class="breadcrumb">
+    <a href="index.html">Home</a> / Cart
+</div>
+
+<main class="cart-main">
+    <h2 style="margin-left: 2rem; margin-top: 0;">Your Cart</h2>
+    <div class="cart-container">
+        <!-- Cart Items List -->
+        <div class="cart-items-box card">
+            <div class="cart-item">
+                <img src="/static/img/airpods-max.png" alt="Airpods Max">
+                <div class="cart-item-info">
+                    <div class="cart-item-title">Airpods - Max</div>
+                    <div class="cart-item-desc">Color: Grey</div>
+                    <div class="cart-item-desc">Quantity: 03</div>
+                </div>
+                <div class="cart-item-price">$205.00</div>
+                <button class="cart-remove-btn" onclick="alert('Removed from cart!')"><i class="fa-solid fa-trash"></i></button>
+            </div>
+            <div class="cart-item">
+                <img src="/static/img/airpods-max.png" alt="Airpods Max">
+                <div class="cart-item-info">
+                    <div class="cart-item-title">Airpods - Max</div>
+                    <div class="cart-item-desc">Color: Grey</div>
+                    <div class="cart-item-desc">Quantity: 03</div>
+                </div>
+                <div class="cart-item-price">$205.00</div>
+                <button class="cart-remove-btn" onclick="alert('Removed from cart!')"><i class="fa-solid fa-trash"></i></button>
+            </div>
+            <div class="cart-item">
+                <img src="/static/img/airpods-max.png" alt="Airpods Max">
+                <div class="cart-item-info">
+                    <div class="cart-item-title">Airpods - Max</div>
+                    <div class="cart-item-desc">Color: Grey</div>
+                    <div class="cart-item-desc">Quantity: 03</div>
+                </div>
+                <div class="cart-item-price">$205.00</div>
+                <button class="cart-remove-btn" onclick="alert('Removed from cart!')"><i class="fa-solid fa-trash"></i></button>
+            </div>
+            <div class="cart-item">
+                <img src="/static/img/airpods-max.png" alt="Airpods Max">
+                <div class="cart-item-info">
+                    <div class="cart-item-title">Airpods - Max</div>
+                    <div class="cart-item-desc">Color: Grey</div>
+                    <div class="cart-item-desc">Quantity: 03</div>
+                </div>
+                <div class="cart-item-price">$205.00</div>
+                <button class="cart-remove-btn" onclick="alert('Removed from cart!')"><i class="fa-solid fa-trash"></i></button>
+            </div>
+            <div class="cart-item">
+                <img src="/static/img/airpods-max.png" alt="Airpods Max">
+                <div class="cart-item-info">
+                    <div class="cart-item-title">Airpods - Max</div>
+                    <div class="cart-item-desc">Color: Grey</div>
+                    <div class="cart-item-desc">Quantity: 03</div>
+                </div>
+                <div class="cart-item-price">$205.00</div>
+                <button class="cart-remove-btn" onclick="alert('Removed from cart!')"><i class="fa-solid fa-trash"></i></button>
+            </div>
+        </div>
+        <!-- Order Summary -->
+        <div class="cart-summary-box card">
+            <div class="cart-summary-row">
+                <span>Subtotal</span>
+                <span>$570</span>
+            </div>
+            <div class="cart-summary-row">
+                <span>Discount(-20%)</span>
+                <span style="color: #e53935;">-$100</span>
+            </div>
+            <div class="cart-summary-row">
+                <span>Delivery Free</span>
+                <span>$15</span>
+            </div>
+            <hr>
+            <div class="cart-summary-row cart-summary-total">
+                <span>Total</span>
+                <span>$475</span>
+            </div>
+            <div class="cart-summary-promo">
+                <input type="text" placeholder="Enter promo code" disabled>
+                <button class="cart-summary-apply" disabled>Apply</button>
+            </div>
+            <a href="checkout.html" class="cart-checkout-btn">
+                Go to Checkout <span style="font-size:1.2em;vertical-align:middle;">&rarr;</span>
+            </a>
+        </div>
+    </div>
+</main>
+<footer style="text-align:center;padding:2rem 0 1rem 0;color:#888;font-size:0.98rem;">
+    &copy; 2025 E-Commerce. All rights reserved.
+</footer>
+<script src="/static/js/scripts.js"></script>
+</body>
+</html>
