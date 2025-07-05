@@ -337,6 +337,13 @@
                 width: 100%;
                 min-width: 120px;
             }
+            .section-title {
+                font-size: 1.2rem;
+                font-weight: 600;
+                margin-bottom: 18px;
+                color: #222;
+                letter-spacing: 0.5px;
+            }
         }
         @media (max-width: 767.98px) {
             .topbar {
@@ -415,12 +422,12 @@
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" th:href="@{/categories/All}">
+                <a class="nav-link active" th:href="@{/categories/All}">
                     <i class="bi bi-grid-3x3-gap-fill"></i>Category
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link active" th:href="@{/products/all}">
+                <a class="nav-link" th:href="@{/products/All}">
                     <i class="bi bi-box-seam"></i>Product
                 </a>
             </li>
@@ -455,136 +462,59 @@
             </div>
         </div>
         <div class="container-fluid">
-            <!-- Product Filters Row -->
-            <div class="product-filters-row mb-3">
-                <input type="text" class="form-control me-2" placeholder="Search product">
-                <select class="form-select me-2" style="min-width:120px;">
-                    <option>All Product</option>
-                    <option>Jackets</option>
-                    <option>Shoes</option>
-                </select>
-                <select class="form-select me-2" style="min-width:120px;">
-                    <option>Default</option>
-                    <option>Price: Low to High</option>
-                    <option>Price: High to Low</option>
-                </select>
-                <button class="btn btn-filter me-2"><i class="bi bi-funnel"></i> Filter</button>
-                <button class="btn btn-add ms-auto" data-bs-toggle="modal" data-bs-target="#productModal">
-                    <i class="bi bi-plus-lg me-2"></i>Add product
-                </button>
-            </div>
-            <!-- Category/Status/Price/Warehouse Filters -->
-            <div class="row mb-4 g-2">
-                <div class="col-12 col-sm-6 col-md-3">
-                    <select class="form-select">
-                        <option>Category</option>
-                        <option>Jackets</option>
-                        <option>Shoes</option>
-                    </select>
-                </div>
-                <div class="col-12 col-sm-6 col-md-3">
-                    <select class="form-select">
-                        <option>All Status</option>
-                        <option>Active</option>
-                        <option>Inactive</option>
-                    </select>
-                </div>
-                <div class="col-12 col-sm-6 col-md-3">
-                    <select class="form-select">
-                        <option>$50 - $100</option>
-                        <option>$100 - $200</option>
-                    </select>
-                </div>
-                <div class="col-12 col-sm-6 col-md-3">
-                    <select class="form-select">
-                        <option>All Store</option>
-                        <option>Warehouse 1</option>
-                        <option>Warehouse 2</option>
-                    </select>
-                </div>
-            </div>
-            <!-- Products Table -->
-            <div class="table-responsive">
-                <table class="table product-table">
-                    <thead>
-                    <tr>
-                        <th>Product Name</th>
-                        <th>Purchase Unit Price</th>
-                        <th>Products</th>
-                        <th>Status</th>
-                        <th>Actions</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <!-- Example rows, repeat or use Thymeleaf th:each for dynamic data -->
-                    <tr th:each="prod : ${products}">
-                        <td>
-                            <div class="d-flex align-items-center">
-                                <img th:src="@{'/images/' + ${prod.image}}" class="product-img" alt="Product Image">
-                                <div>
-                                    <div style="font-weight:600;" th:text="${prod.productName}">Product Name</div>
-                                    <div style="font-size:0.92rem; color:#888;" th:text="${prod.description}">Warm clothing</div>
-                                </div>
-                            </div>
-                        </td>
-                        <td th:text="${prod.price}">0.0</td>
-                        <td th:text="${prod.quantity}">0</td>
-                        <td>
-                            <span class="status-label"
-                                  th:text="${prod.stockState}"
-                                  th:classappend="${prod.stockState.name().toLowerCase()}">
-                            </span>
-                        </td>
-                        <td>
-                            <a class="btn btn-edit" href="#"
-                               th:attr="data-id=${prod.id}, data-name=${prod.productName},
-                                data-desc=${prod.description}, data-price=${prod.price},
-                                data-quantity=${prod.quantity}, data-stock=${prod.stockState}, data-image=${prod.image}"
-                               data-bs-toggle="modal"
-                               data-bs-target="#productModal">
+            <br><br>
+    <div class="section-title">Dashboard / Category</div>
+<!--    <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>-->
+<!--    <div th:if="${categories.size() == 0}" class="alert alert-info">No categories found. Click 'Add Category' to create one.</div>-->
 
+        <div class="product-filters-row mb-3">
+            <input type="text" class="search-bar" placeholder="Search category">
 
-                                <i class="bi bi-pencil"></i> Edit
-                            </a>
-
-                            <a class="btn btn-delete" th:href="@{/products/delete(productId=${prod.id})}"
-                                    onclick="if (!(confirm('Are you sure you want to delete this product?'))) return false">
-                                <i class="bi bi-trash"></i>
-                            </a>
-                        </td>
-                    </tr>
-<!--                    <tr>-->
-<!--                        <td>-->
-<!--                            <div class="d-flex align-items-center">-->
-<!--                                <img src="https://img.icons8.com/ios-filled/50/000000/jumper.png" class="product-img" alt="Sweater">-->
-<!--                                <div>-->
-<!--                                    <div style="font-weight:600;">Sweater</div>-->
-<!--                                    <div style="font-size:0.92rem; color:#888;">Warm clothing</div>-->
-<!--                                </div>-->
-<!--                            </div>-->
-<!--                        </td>-->
-<!--                        <td>$100.0</td>-->
-<!--                        <td>4500</td>-->
-<!--                        <td>-->
-<!--                            <select class="status-select inactive">-->
-<!--                                <option>Active</option>-->
-<!--                                <option selected class="inactive">Inactive</option>-->
-<!--                            </select>-->
-<!--                        </td>-->
-<!--                        <td>-->
-<!--                            <button class="btn btn-edit"><i class="bi bi-pencil"></i> Edit</button>-->
-<!--                            <button class="btn btn-delete"><i class="bi bi-trash"></i></button>-->
-<!--                        </td>-->
-<!--                    </tr>-->
-                    <!-- Add more rows as needed -->
-                    </tbody>
-                </table>
-            </div>
+            <button class="btn btn-add ms-auto" data-bs-toggle="modal" data-bs-target="#productModal">
+                <i class="bi bi-plus-lg me-2"></i>Add category
+            </button>
         </div>
+
+        <div class="table-responsive">
+            <table class="table product-table">
+                <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Description</th>
+                    <th>Products</th>
+                    <th>Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="cat : ${categories}">
+                    <td th:text="${cat.name}"></td>
+                    <td th:text="${cat.description}"></td>
+                    <td th:text="${cat.products != null ? cat.products.size() :0}"></td>
+                    <td>
+                        <a href="#" class="btn btn-edit"
+                        th:attr="data-id=${cat.id}, data-name=${cat.name}, data-desc=${cat.description}"
+                        data-bs-toggle="modal"
+                        data-bs-target="#productModal">
+                            <i class="bi bi-pencil"></i> Edit
+
+                        </a>
+
+                        <a href="#" class="btn btn-delete" th:href="@{/categories/delete(categoryId=${cat.id})}"
+                        onclick="if (!(confirm('Are you sure you want to delete this category?'))) return false">
+                        <i class="bi bi-trash"></i>
+                        </a>
+                    </td>
+                </tr>
+
+                </tbody>
+            </table>
+        </div>
+
+  </div>
     </div>
 </div>
 
-<!-- Add/Edit Product Modal -->
+<!-- Add/Edit Category Modal -->
 <div class="modal fade" id="productModal" tabindex="-1" aria-labelledby="productModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
@@ -592,61 +522,23 @@
                 <h5 class="modal-title" id="productModalLabel">Add Product</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-<!--            <form th:action="@{/products/addProduct}" th:object="${product}" method="post" enctype="multipart/form-data">-->
-            <form id="productForm" th:object="${product}" method="post" enctype="multipart/form-data">
+            <!--            <form th:action="@{/products/addProduct}" th:object="${product}" method="post" enctype="multipart/form-data">-->
+            <form id="productForm" th:object="${category}" method="post" enctype="multipart/form-data">
                 <div class="modal-body">
                     <div class="mb-3">
-                        <label for="category" class="form-label">Select Category</label>
-                        <select class="form-select" id="category" th:field="*{category}">
-                            <option th:each="cat : ${categories}"
-                                    th:value="${cat.id}"
-                                    th:text="${cat.name}"
-                            >
-                            </option>
-                        </select>
-                    </div>
-                    <div class="mb-3">
                         <input type="hidden" id="productId" name="id">
-                        <label for="productName" class="form-label">Product Name</label>
-                        <input type="text" class="form-control" id="productName" placeholder="Enter product name" th:field="*{productName}">
+                        <label for="productName" class="form-label">Category Name</label>
+                        <input type="text" class="form-control" id="productName" placeholder="Enter product name" th:field="*{name}">
                     </div>
                     <div class="mb-3">
                         <label for="productDesc" class="form-label">Description</label>
                         <input type="text" class="form-control" id="productDesc" placeholder="Enter description" th:field="*{description}">
                     </div>
 
-
-                    <div class="mb-3">
-                        <label for="productPrice" class="form-label">Purchase Unit Price</label>
-                        <input type="number" class="form-control" id="productPrice" placeholder="$0.00" th:field="*{price}">
-                    </div>
-
-                    <div class="mb-3">
-                        <label for="productQuantity" class="form-label">Quantity</label>
-                        <input type="number" class="form-control" id="productQuantity" placeholder="$0.00" th:field="*{quantity}">
-                    </div>
-                    <div class="mb-3">
-                        <label for="stockState" class="form-label">Stock State</label>
-                        <select class="form-select" id="stockState" th:field="*{stockState}">
-                            <option th:each="state : ${T(com.ecommerce.assignment.util.EStockState).values()}"
-                                    th:value="${state}" th:text="${state}">
-
-                            </option>
-                        </select>
-                    </div>
-                    <div class="mb-3">
-                        <label for="productImage" class="form-label">Product Image</label>
-                        <!-- Preview existing image -->
-                        <div id="imagePreviewContainer" class="mb-2" style="display: none;">
-                            <img id="imagePreview" src="" alt="Current Image" class="img-thumbnail" style="max-width: 150px;">
-                        </div>
-
-                        <input type="file" class="form-control" id="productImage" name="imageFile">
-                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="submit" class="btn btn-primary">Save Product</button>
+                    <button type="submit" class="btn btn-primary">Save</button>
                 </div>
             </form>
         </div>
@@ -716,32 +608,12 @@
             const id = button.getAttribute('data-id');
             const name = button.getAttribute('data-name');
             const desc = button.getAttribute('data-desc');
-            const cat = button.getAttribute('data-cat');
-            const price = button.getAttribute('data-price');
-            const quantity = button.getAttribute('data-quantity');
-            const stock = button.getAttribute('data-stock');
 
-            const imagePreview = document.getElementById('imagePreview');
-            const imagePreviewContainer = document.getElementById('imagePreviewContainer');
-
-            const imageFileName = button.getAttribute('data-image');
-            if(imageFileName){
-                imagePreview.src = '/images/' + imageFileName;
-                imagePreviewContainer.style.display = 'block';
-
-            }
-            else {
-                imagePreviewContainer.style.display = 'none';
-            }
 
             const modalTitle = productModal.querySelector('.modal-title');
             const productIdField = productForm.querySelector('#productId');
             const nameField = productForm.querySelector('#productName');
             const descField = productForm.querySelector('#productDesc');
-            const categoryField = productForm.querySelector('#category');
-            const priceField = productForm.querySelector('#productPrice');
-            const quantityField = productForm.querySelector('#productQuantity');
-            const stockField = productForm.querySelector('#stockState');
 
             if(id){
                 // Edit mode
@@ -750,22 +622,14 @@
                 productIdField.value = id;
                 nameField.value = name;
                 descField.value = desc;
-                categoryField.value = cat;
-                priceField.value = price;
-                quantityField.value = quantity;
-                stockField.value = stock;
 
             }
             else {
-                modalTitle.textContent = 'Add Product';
-                productForm.action = '/products/addProduct';
+                modalTitle.textContent = 'Add Category';
+                productForm.action = '/categories/addCategory';
                 productIdField.value = '';
                 nameField.value = '';
                 descField.value = '';
-                categoryField.value = '';
-                priceField.value = '';
-                quantityField.value = '';
-                stockField.value = '';
 
             }
 

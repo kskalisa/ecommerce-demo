@@ -31,6 +31,7 @@ public class ProductService implements IProductService {
             found.setProductName(theProduct.getProductName());
             found.setDescription(theProduct.getDescription());
             found.setPrice(theProduct.getPrice());
+            found.setCategory(theProduct.getCategory());
             found.setQuantity(theProduct.getQuantity());
             found.setImage(theProduct.getImage());
             found.setStockState(theProduct.getStockState());

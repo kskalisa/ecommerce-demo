@@ -21,6 +21,11 @@ public class DashboardController {
         return "customers";
     }
 
+    @GetMapping("/categories")
+    public String categories(){
+        return "category";
+    }
+
     @GetMapping("/product-dashboard")
     public String products(){
         return "products";
