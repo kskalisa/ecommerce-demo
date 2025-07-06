@@ -29,7 +29,7 @@ public class CategoryService implements ICategoryService{
 
     @Override
     public Category updateCategory(Category theCategory) {
-        Category found = findCategoryById(theCategory.getId()).orElseThrow(() -> new ObjectNotFoundException(Category.class, "Category not found"));
+        Category found = findCategoryById(theCategory.getId());
         if (Objects.nonNull(found)) {
             found.setName(theCategory.getName());
             found.setDescription(theCategory.getDescription());
@@ -41,17 +41,17 @@ public class CategoryService implements ICategoryService{
 
     @Override
     public Category deleteCategory(Category theCategory) {
-        Category found = findCategoryById(theCategory.getId()).orElseThrow(() -> new ObjectNotFoundException(Category.class, "Category not found"));
+        Category found = findCategoryById(theCategory.getId());
         if (Objects.nonNull(found)) {
-            found.setActive(Boolean.FALSE);
-            return categoryRepo.save(found);
+            categoryRepo.delete(found);
+            return found;
         }
         throw new ObjectNotFoundException(Category.class, "Category not found");
     }
 
     @Override
-    public Optional<Category> findCategoryById(UUID id) {
-        return categoryRepo.findById(id);
+    public Category findCategoryById(UUID id) {
+        return categoryRepo.findById(id).orElseThrow(() -> new ObjectNotFoundException(Category.class, "Category not found"));
     }
 
     @Override

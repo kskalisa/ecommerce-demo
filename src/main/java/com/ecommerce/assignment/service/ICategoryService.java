@@ -11,6 +11,6 @@ public interface ICategoryService {
     Category createCategory(Category theCategory);
     Category updateCategory(Category theCategory);
     Category deleteCategory(Category theCategory);
-    Optional<Category> findCategoryById(UUID id);
+    Category findCategoryById(UUID id);
     List<Category> findCategoryByName(String name);
 }

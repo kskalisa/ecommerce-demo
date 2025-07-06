@@ -62,42 +62,22 @@
 <section class="products">
     <h3>Headphones For You!</h3>
     <div class="product-grid">
-        <div class="product-card">
-            <a href="product-details.html"><img src="/static/img/earbuds.png" alt="Wireless Earbuds, IPX8"></a>
+        <div class="product-card" th:each="prod : ${products}">
+            <a href="product-details.html">
+                <img th:src="@{'/images/' + ${prod.image}}" alt="Product Image">
+            </a>
             <div class="product-info">
-                <div>Wireless Earbuds, IPX8</div>
-                <small>3000+ orders, 4.9 (1200)</small>
-                <div class="stars">★★★★★</div>
+                <div th:text="${prod.productName}" class="product-title">Product Name</div>
+                <small th:text="${prod.description}" class="product-description">3000+ orders, 4.9 (1200)</small>
+                <div>
+                   <span class="stars">★★★★★</span>
+                    <span class="rating-count">(121)</span></div>
+
+                <div class="product-price" th:text="'$' + ${prod.price}">$89.00</div>
                 <a href="cart.html" class="add-cart">Add to Cart</a>
             </div>
         </div>
-        <div class="product-card">
-            <a href="product-details.html"><img src="/static/img/earbuds.png" alt="Wireless Earbuds, IPX8"></a>
-            <div class="product-info">
-                <div>Wireless Earbuds, IPX8</div>
-                <small>3000+ orders, 4.9 (1200)</small>
-                <div class="stars">★★★★★</div>
-                <a href="cart.html" class="add-cart">Add to Cart</a>
-            </div>
-        </div>
-        <div class="product-card">
-            <a href="product-details.html"><img src="/static/img/earbuds.png" alt="Wireless Earbuds, IPX8"></a>
-            <div class="product-info">
-                <div>Wireless Earbuds, IPX8</div>
-                <small>3000+ orders, 4.9 (1200)</small>
-                <div class="stars">★★★★★</div>
-                <a href="cart.html" class="add-cart">Add to Cart</a>
-            </div>
-        </div>
-        <div class="product-card">
-            <a href="product-details.html"><img src="/static/img/earbuds.png" alt="Wireless Earbuds, IPX8"></a>
-            <div class="product-info">
-                <div>Wireless Earbuds, IPX8</div>
-                <small>3000+ orders, 4.9 (1200)</small>
-                <div class="stars">★★★★★</div>
-                <a href="cart.html" class="add-cart">Add to Cart</a>
-            </div>
-        </div>
+
     </div>
 </section>
 
