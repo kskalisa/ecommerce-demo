@@ -60,10 +60,18 @@
 
 <!-- Headphones For You! -->
 <section class="products">
+    <!--            <div>-->
+    <!--                <form th:action="@{product-details}" method="get">-->
+    <!--                    <input th:hidden="true" name="productId" th:value="@{prod.id}">-->
+
+
+    <!--                </form>-->
+    <!--            </div>-->
     <h3>Headphones For You!</h3>
     <div class="product-grid">
         <div class="product-card" th:each="prod : ${products}">
-            <a href="product-details.html">
+
+            <a th:href="@{/product-details/{productId}(productId=${prod.id})}">
                 <img th:src="@{'/images/' + ${prod.image}}" alt="Product Image">
             </a>
             <div class="product-info">

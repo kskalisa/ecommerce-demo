@@ -4,12 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
-    <link rel="stylesheet" href="/static/css/styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+
 </head>
 <body>
 <header class="navbar minimal-navbar">
-    <a href="index.html" class="logo">E-Commerce</a>
+    <a th:href="@{/}" class="logo">E-Commerce</a>
 </header>
 <main class="auth-main">
     <div class="auth-container">

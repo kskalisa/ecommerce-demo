@@ -8,8 +8,12 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
+import java.util.Objects;
+import java.util.UUID;
 
 @Controller
 @RequiredArgsConstructor
@@ -23,4 +27,39 @@ public class MainController {
         model.addAttribute("products", products);
         return "main/index";
     }
+
+//    @GetMapping("/product-details{productId}")
+//    public String productDetails(@PathVariable("productId") UUID productId, Model model){
+////        if(Objects.nonNull(id)){
+////            Product product = productService.findProductByIdAndState(UUID.fromString(id), true);
+////            if(Objects.nonNull(product)){
+////                model.addAttribute("product", product);
+////                return "main/product-details";
+////            }
+////
+////        }
+//        Product product = productService.findProductByIdAndState(productId, true);
+//        if(product != null) {
+//            model.addAttribute("product", product);
+//            return "main/product-details";
+//        }
+//        model.addAttribute("error", "Wrong Information");
+//        return "redirect:/";
+//
+//
+//    }
+
+    @GetMapping("/product-details/{productId}")
+    public String productDetails(@PathVariable("productId") UUID productId, Model model) {
+        Product product = productService.findProductByIdAndState(productId, true);
+        if (product != null) {
+            model.addAttribute("product", product);
+            return "main/product-details";
+        }
+        model.addAttribute("error", "Product not found");
+        return "redirect:/";
+    }
+
+
+
 }

@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Product Details - Airpods Max</title>
-    <link rel="stylesheet" href="/static/css/styles.css">
+    <link rel="stylesheet" href="/css/styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 </head>
 <body>
@@ -34,11 +34,11 @@
 <!-- Product Details Section -->
 <section class="product-details-section card" style="margin-top: 1.5rem;">
     <div class="product-details-image">
-        <img src="/static/img/airpods-max.png" alt="Airpods Max">
+        <img th:src="@{'/images/' + ${product.image}}" alt="Airpods Max">
     </div>
     <div class="product-details-info">
-        <h2>Airpods - Max</h2>
-        <div style="margin: 0.5rem 0 1rem 0; color: #888; font-size: 1rem;">Wireless Over-Ear Headphones</div>
+        <h2 th:text="${product.productName}">Airpods - Max</h2>
+        <div style="margin: 0.5rem 0 1rem 0; color: #888; font-size: 1rem;" th:text="${product.description}">Wireless Over-Ear Headphones</div>
         <div style="display: flex; align-items: center; gap: 1.5rem; margin-bottom: 1rem;">
             <span class="stars" style="color: #ffc107; font-size: 1.2rem;">★★★★★</span>
             <span style="color: #1976d2; font-weight: 500;">4.9</span>
@@ -47,7 +47,7 @@
         <div style="font-size: 1.5rem; font-weight: bold; color: #1976d2; margin-bottom: 1rem;">$549.00</div>
         <div style="margin-bottom: 1.2rem; color: #444;">Experience high-fidelity audio with Airpods Max. Active Noise Cancellation, Transparency mode, and spatial audio for immersive sound. Up to 20 hours of listening time.</div>
         <div style="display: flex; align-items: center; gap: 1.2rem; margin-bottom: 1.2rem;">
-            <label for="quantity" style="font-weight: 500;">Quantity:</label>
+            <label for="quantity" style="font-weight: 500;" th:text="${product.quantity}">Quantity:</label>
             <div class="quantity-selector">
                 <button class="qty-btn" onclick="decrementQty()">-</button>
                 <input id="quantity" type="number" value="1" min="1">
