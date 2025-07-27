@@ -395,47 +395,8 @@
 </head>
 <body>
 <div class="layout">
-    <!-- Sidebar -->
-    <div class="sidebar" id="sidebar">
-        <div class="sidebar-title">E-Commerce</div>
-        <ul class="nav flex-column px-2">
-            <li class="nav-item">
-                <a class="nav-link" href="/dashboard">
-                    <i class="bi bi-grid-fill"></i>Dashboard
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="/orders">
-                    <i class="bi bi-bag-fill"></i>Orders
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" th:href="@{/customers}">
-                    <i class="bi bi-people-fill"></i>Customers
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" th:href="@{/categories/All}">
-                    <i class="bi bi-grid-3x3-gap-fill"></i>Category
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link active" th:href="@{/products/all}">
-                    <i class="bi bi-box-seam"></i>Product
-                </a>
-            </li>
-        </ul>
-        <div class="bottom-links px-2">
-            <ul class="nav flex-column">
-                <li class="nav-item">
-                    <a class="nav-link" href="#"><i class="bi bi-gear-fill"></i>Settings</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#"><i class="bi bi-box-arrow-right"></i>Logout</a>
-                </li>
-            </ul>
-        </div>
-    </div>
+    <div th:replace="fragments/sidebar::sidebar"></div>
+
     <div class="sidebar-overlay" id="sidebarOverlay"></div>
     <!-- Main content -->
     <div class="main-content" id="mainContent">
@@ -773,6 +734,8 @@
     });
 
 </script>
+
+<th:block th:replace="fragments/sidebar::sidebarScript"></th:block>
 <!-- Bootstrap JS for modal and dropdowns -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>

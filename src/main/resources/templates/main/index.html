@@ -9,22 +9,24 @@
 </head>
 <body>
 <!-- Top Navigation Bar -->
-<header class="navbar">
-    <div class="navbar-left">
-        <span class="logo">E-Commerce</span>
-        <nav>
-            <a href="index.html" class="active">Home</a>
-            <a href="#">Categories</a>
-            <a href="#">Deals</a>
-            <a href="#">What's New</a>
-            <a href="#">Delivery</a>
-        </nav>
-    </div>
-    <div class="navbar-right">
-        <a href="account.html">Account</a>
-        <a href="cart.html">Cart</a>
-    </div>
-</header>
+<!--<header class="navbar">-->
+<!--    <div class="navbar-left">-->
+<!--        <span class="logo">E-Commerce</span>-->
+<!--        <nav>-->
+<!--            <a href="index.html" class="active">Home</a>-->
+<!--            <a href="#">Categories</a>-->
+<!--            <a href="#">Deals</a>-->
+<!--            <a href="#">What's New</a>-->
+<!--            <a href="#">Delivery</a>-->
+<!--        </nav>-->
+<!--    </div>-->
+<!--    <div class="navbar-right">-->
+<!--        <a href="account.html">Account</a>-->
+<!--        <a href="cart.html">Cart</a>-->
+<!--    </div>-->
+<!--</header>-->
+
+<div th:replace="fragments/header :: siteHeader"></div>
 
 <!-- Hero Section -->
 <section class="hero">
@@ -82,7 +84,8 @@
                     <span class="rating-count">(121)</span></div>
 
                 <div class="product-price" th:text="'$' + ${prod.price}">$89.00</div>
-                <a href="cart.html" class="add-cart">Add to Cart</a>
+                <a  th:href="@{/product-details/{productId}(productId=${prod.id})}" class="add-cart">Add to Cart</a>
+
             </div>
         </div>
 

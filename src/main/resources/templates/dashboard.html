@@ -5,6 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+
+    <!-- Include Sidebar Styles -->
+    <th:block th:replace="fragments/sidebar::sidebarStyles"></th:block>
+
     <style>
         html, body {
             height: 100%;
@@ -24,44 +28,7 @@
             width: 100vw;
             overflow-x: hidden;
         }
-        .sidebar {
-            background: #fff;
-            min-height: 100vh;
-            border-right: 1.5px solid #e0e0e0;
-            width: 220px;
-            position: relative;
-            z-index: 1040;
-            transition: left 0.3s, background 0.3s, color 0.3s;
-        }
-        .sidebar .nav-link {
-            color: #222;
-            font-weight: 500;
-            border-radius: 8px;
-            margin: 4px 0;
-            padding: 12px 20px;
-            display: flex;
-            align-items: center;
-            transition: background 0.2s, color 0.2s;
-        }
-        .sidebar .nav-link.active, .sidebar .nav-link:hover {
-            background: #2563eb;
-            color: #fff;
-        }
-        .sidebar .nav-link i {
-            margin-right: 12px;
-            font-size: 1.2rem;
-        }
-        .sidebar .sidebar-title {
-            font-size: 1.5rem;
-            font-weight: bold;
-            padding: 32px 20px 24px 20px;
-            letter-spacing: 1px;
-        }
-        .sidebar .bottom-links {
-            position: absolute;
-            bottom: 32px;
-            width: 100%;
-        }
+
         .profile-img {
             width: 38px;
             height: 38px;
@@ -159,25 +126,11 @@
             font-weight: 500;
             transition: background 0.3s, color 0.3s;
         }
+
+        /* Dark Mode Styles */
         .dark-mode {
             background: #181a1b !important;
             color: #e5e7eb !important;
-        }
-        .dark-mode .sidebar {
-            background: #23272b !important;
-            border-right: 1.5px solid #23272b !important;
-            color: #e5e7eb !important;
-        }
-        .dark-mode .sidebar .nav-link {
-            color: #e5e7eb !important;
-        }
-        .dark-mode .sidebar .nav-link.active,
-        .dark-mode .sidebar .nav-link:hover {
-            background: #2563eb !important;
-            color: #fff !important;
-        }
-        .dark-mode .sidebar .sidebar-title {
-            color: #fff !important;
         }
         .dark-mode .topbar {
             background: #23272b !important;
@@ -211,6 +164,7 @@
         .dark-mode .progress {
             background-color: #181a1b !important;
         }
+
         .sidebar-toggle {
             display: none;
             background: none;
@@ -237,16 +191,9 @@
         .dark-mode .dark-toggle-btn {
             color: #ffd700;
         }
+
+        /* Mobile Responsive */
         @media (max-width: 991.98px) {
-            .sidebar {
-                position: fixed;
-                left: -220px;
-                top: 0;
-                height: 100vh;
-            }
-            .sidebar.show {
-                left: 0;
-            }
             .sidebar-toggle {
                 display: inline-block;
             }
@@ -282,17 +229,6 @@
             }
         }
         @media (max-width: 575.98px) {
-            .sidebar {
-                width: 100vw;
-                left: -100vw;
-            }
-            .sidebar.show {
-                left: 0;
-            }
-            .sidebar .sidebar-title {
-                padding: 20px 10px 16px 10px;
-                font-size: 1.2rem;
-            }
             .topbar {
                 padding: 10px 6px;
             }
@@ -304,48 +240,11 @@
 </head>
 <body>
 <div class="layout">
-    <!-- Sidebar -->
-    <div class="sidebar" id="sidebar">
-        <div class="sidebar-title">E-Commerce</div>
-        <ul class="nav flex-column px-2">
-            <li class="nav-item">
-                <a class="nav-link active" href="/dashboard">
-                    <i class="bi bi-grid-fill"></i>Dashboard
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="/orders">
-                    <i class="bi bi-bag-fill"></i>Orders
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="/customers">
-                    <i class="bi bi-people-fill"></i>Customers
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" th:href="@{/categories/All}">
-                    <i class="bi bi-grid-3x3-gap-fill"></i>Category
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="/products">
-                    <i class="bi bi-box-seam"></i>Product
-                </a>
-            </li>
-        </ul>
-        <div class="bottom-links px-2">
-            <ul class="nav flex-column">
-                <li class="nav-item">
-                    <a class="nav-link" href="#"><i class="bi bi-gear-fill"></i>Settings</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#"><i class="bi bi-box-arrow-right"></i>Logout</a>
-                </li>
-            </ul>
-        </div>
-    </div>
+    <!-- Include Sidebar Fragment -->
+    <div th:replace="fragments/sidebar::sidebar"></div>
+
     <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
     <!-- Main content -->
     <div class="main-content" id="mainContent">
         <!-- Topbar -->
@@ -489,7 +388,8 @@
         </div>
     </div>
 </div>
-<!-- Sidebar and dark mode toggle script -->
+
+<!-- Scripts -->
 <script>
     const sidebar = document.getElementById('sidebar');
     const sidebarToggle = document.getElementById('sidebarToggle');
@@ -540,6 +440,21 @@
     darkToggleBtn && darkToggleBtn.addEventListener('click', function() {
         setDarkMode(!body.classList.contains('dark-mode'));
     });
+
+    // Optional: Close sidebar when clicking outside on mobile
+    document.addEventListener('click', function(event) {
+        const sidebarToggle = document.querySelector('.sidebar-toggle');
+
+        if (window.innerWidth <= 991) {
+            if (!sidebar.contains(event.target) && !sidebarToggle?.contains(event.target)) {
+                closeSidebar();
+            }
+        }
+    });
 </script>
+
+<!-- Include Sidebar JavaScript -->
+<th:block th:replace="fragments/sidebar::sidebarScript"></th:block>
+
 </body>
 </html>

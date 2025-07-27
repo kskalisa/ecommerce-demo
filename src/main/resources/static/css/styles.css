@@ -777,6 +777,71 @@ body {
     }
 }
 
+/* Error message styling */
+.error {
+    color: #dc3545;
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+    margin-bottom: 0.5rem;
+}
+
+/* Alert styling */
+.alert {
+    padding: 1rem;
+    margin-bottom: 1rem;
+    border: 1px solid transparent;
+    border-radius: 0.25rem;
+}
+
+.alert-danger {
+    color: #721c24;
+    background-color: #f8d7da;
+    border-color: #f5c6cb;
+}
+
+/* Add animation for alerts */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.alert {
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+/* Style for input fields with errors */
+input:invalid,
+input.error {
+    border-color: #dc3545;
+    background-color: #fff;
+}
+
+/* Optional: Add a shake animation for invalid inputs */
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-10px); }
+    75% { transform: translateX(10px); }
+}
+
+input:invalid {
+    animation: shake 0.3s;
+}
+.alert-success {
+    background-color: #d4edda;
+    color: #155724;
+    padding: 10px;
+    margin-bottom: 15px;
+    border-radius: 5px;
+}
+
+
+
 /* Account Page v2 Styles */
 .account-main-v2 {
     background: #f6f8fa;
@@ -1032,4 +1097,149 @@ body {
         font-size: 0.95rem;
         min-width: 400px;
     }
+}
+
+
+/* Header + Breadcrumb */
+.breadcrumb {
+    background-color: #f2f2f2;
+    padding: 1rem 2rem;
+    font-size: 0.9rem;
+    color: #555;
+}
+
+.breadcrumb a {
+    color: #333;
+    font-weight: bold;
+}
+
+/* Layout */
+.checkout-main {
+    max-width: 1200px;
+    margin: 2rem auto;
+    display: flex;
+    gap: 2rem;
+    padding: 0 2rem;
+    flex-wrap: wrap;
+}
+
+.checkout-container {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 2rem;
+    width: 100%;
+}
+
+/* Card Box */
+.card {
+    background-color: #fff;
+    padding: 2rem;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.05);
+    border-radius: 12px;
+    flex: 1;
+    min-width: 320px;
+}
+
+/* Delivery Info */
+.checkout-info-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.checkout-edit-btn {
+    background: #0077cc;
+    color: white;
+    border: none;
+    padding: 0.4rem 0.8rem;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.9rem;
+}
+
+.checkout-edit-btn i {
+    margin-right: 4px;
+}
+
+.checkout-info-form label {
+    display: block;
+    margin: 1rem 0 0.5rem;
+    font-weight: 500;
+}
+
+.checkout-info-form input,
+.checkout-info-form select {
+    width: 100%;
+    padding: 0.6rem;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 1rem;
+}
+
+.checkout-info-form button[type="submit"] {
+    margin-top: 1.5rem;
+    width: 100%;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    padding: 0.8rem;
+    border-radius: 8px;
+    font-size: 1rem;
+    cursor: pointer;
+}
+
+/* Summary */
+.checkout-summary-box .checkout-summary-row {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.checkout-coupon-input {
+    flex: 2;
+    padding: 0.6rem;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+}
+
+.checkout-coupon-btn {
+    flex: 1;
+    background: #ffc107;
+    border: none;
+    color: #333;
+    padding: 0.6rem;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.checkout-payment-details {
+    margin-top: 1rem;
+}
+
+.checkout-payment-title {
+    font-weight: bold;
+    font-size: 1.1rem;
+    margin-bottom: 1rem;
+}
+
+.checkout-payment-options {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.checkout-radio {
+    display: flex;
+    align-items: center;
+    font-size: 0.95rem;
+}
+
+.checkout-summary-input {
+    width: 100%;
+    padding: 0.6rem;
+    margin-bottom: 1rem;
+    border-radius: 6px;
+    border: 1px solid #ccc;
 }

@@ -28,27 +28,6 @@ public class MainController {
         return "main/index";
     }
 
-//    @GetMapping("/product-details{productId}")
-//    public String productDetails(@PathVariable("productId") UUID productId, Model model){
-////        if(Objects.nonNull(id)){
-////            Product product = productService.findProductByIdAndState(UUID.fromString(id), true);
-////            if(Objects.nonNull(product)){
-////                model.addAttribute("product", product);
-////                return "main/product-details";
-////            }
-////
-////        }
-//        Product product = productService.findProductByIdAndState(productId, true);
-//        if(product != null) {
-//            model.addAttribute("product", product);
-//            return "main/product-details";
-//        }
-//        model.addAttribute("error", "Wrong Information");
-//        return "redirect:/";
-//
-//
-//    }
-
     @GetMapping("/product-details/{productId}")
     public String productDetails(@PathVariable("productId") UUID productId, Model model) {
         Product product = productService.findProductByIdAndState(productId, true);

@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <title>Order Confirmation</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 40px;
+            background-color: #f9f9f9;
+            color: #333;
+        }
+
+        h2 {
+            color: #2c3e50;
+        }
+
+        h3 {
+            margin-top: 30px;
+            color: #2c3e50;
+        }
+
+        p {
+            font-size: 16px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #2c3e50;
+            color: #fff;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        .btn {
+            display: inline-block;
+            margin-top: 30px;
+            padding: 10px 20px;
+            background-color: #27ae60;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+
+        .btn:hover {
+            background-color: #219150;
+        }
+
+        @media print {
+            .no-print {
+                display: none;
+            }
+
+            body {
+                background-color: white;
+                margin: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+<h2>Thank You for Your Order!</h2>
+<p>Your order has been placed successfully.</p>
+
+<p><strong>Shipping To:</strong> <span th:text="${order.shippingAddress}"></span></p>
+<p><strong>Phone Number:</strong> <span th:text="${order.phoneNumber}"></span></p>
+<p><strong>Payment Method:</strong> <span th:text="${order.paymentMethod}"></span></p>
+<p><strong>Order Date:</strong> <span th:text="${#temporals.format(order.orderDate, 'yyyy-MM-dd HH:mm')}"></span></p>
+
+<h3>Order Summary</h3>
+<table>
+    <thead>
+    <tr>
+        <th>Product</th>
+        <th>Qty</th>
+        <th>Price</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="item : ${order.getItems()}">
+        <td th:text="${item.product.productName}">Product Name</td>
+        <td th:text="${item.quantity}">1</td>
+        <td th:text="${item.price}">0.00</td>
+    </tr>
+    </tbody>
+</table>
+
+<a th:href="@{/}" class="btn no-print">← Back to Home</a>
+<a href="#" class="btn no-print" onclick="window.print()">🖨️ Download as PDF</a>
+</body>
+</html>

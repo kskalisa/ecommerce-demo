@@ -4,33 +4,46 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Sign Up</title>
-  <link rel="stylesheet" href="/static/css/styles.css">
+  <link rel="stylesheet" href="/css/styles.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 </head>
 <body>
-<header class="navbar minimal-navbar">
-  <a href="index.html" class="logo">E-Commerce</a>
-</header>
+<div th:replace="fragments/header::siteHeader"></div>
 <main class="auth-main">
   <div class="auth-container">
     <h2>Create Account</h2>
-    <form class="auth-form">
+    <form class="auth-form" th:action="@{/auth/register}" th:object="${user}" method="post">
+      <div th:if="${#fields.hasGlobalErrors()}" class="alert alert-danger">
+        <p th:each="err: ${#fields.globalErrors()}" th:text="${err}">Global Error</p>
+      </div>
+
       <label>Name</label>
-      <input type="text" placeholder="Enter your name">
+      <input type="text" placeholder="Enter your name" th:field="*{username}">
+      <div class="error" th:if="${#fields.hasErrors('username')}" th:errors="*{username}"></div>
       <label>Email</label>
-      <input type="email" placeholder="Enter your email">
+      <input type="email" placeholder="Enter your email" th:field="*{email}">
+      <div class="error" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
+
       <label>Password</label>
-      <input type="password" placeholder="Enter your password">
+      <input type="password" placeholder="Enter your password" th:field="*{password}">
+      <div class="error" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></div>
+
       <label>Confirm Password</label>
-      <input type="password" placeholder="Confirm your password">
-      <button type="button" class="auth-btn" onclick="window.location.href='login.html'">Sign Up</button>
+      <input type="password" placeholder="Confirm your password" th:field="*{confirmPassword}">
+      <div class="error" th:if="${#fields.hasErrors('confirmPassword')}" th:errors="*{confirmPassword}"></div>
+
+      <button type="submit" class="auth-btn">Sign Up</button>
     </form>
-    <div class="auth-link">Already have an account? <a href="login.html">Login</a></div>
+    <div class="auth-link">Already have an account? <a th:href="@{/auth/signin}">Login</a></div>
+    <div th:if="${message}" class="success-message" style="color: green">
+      <p th:text="${message}"></p>
+    </div>
+
   </div>
 </main>
 <footer style="text-align:center;padding:2rem 0 1rem 0;color:#888;font-size:0.98rem;">
   &copy; 2025 E-Commerce. All rights reserved.
 </footer>
-<script src="/static/js/scripts.js"></script>
+<script src="/js/scripts.js"></script>
 </body>
 </html>

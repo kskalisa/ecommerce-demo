@@ -9,25 +9,26 @@
 
 </head>
 <body>
-<header class="navbar minimal-navbar">
-    <a th:href="@{/}" class="logo">E-Commerce</a>
-</header>
+<div th:replace="fragments/header::siteHeader"></div>
 <main class="auth-main">
     <div class="auth-container">
         <h2>Login</h2>
-        <form class="auth-form">
+        <form class="auth-form" th:action="@{/login}" method="post">
             <label>Email</label>
-            <input type="email" placeholder="Enter your email">
+            <input type="email" placeholder="Enter your email" name="email">
             <label>Password</label>
-            <input type="password" placeholder="Enter your password">
-            <button type="button" class="auth-btn" onclick="window.location.href='account.html'">Login</button>
+            <input type="password" placeholder="Enter your password" name="password">
+            <button type="submit" class="auth-btn">Login</button>
         </form>
-        <div class="auth-link">Don't have an account? <a href="signup.html">Sign Up</a></div>
+        <div th:if="${message}" class="alert alert-success" th:text="${message}"></div>
+        <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
+        <div class="auth-link">Forgot Password? <a href="#">Reset Password</a></div>
+        <div class="auth-link">Don't have an account? <a th:href="@{/auth/signup}">Sign Up</a></div>
     </div>
 </main>
 <footer style="text-align:center;padding:2rem 0 1rem 0;color:#888;font-size:0.98rem;">
     &copy; 2025 E-Commerce. All rights reserved.
 </footer>
-<script src="/static/js/scripts.js"></script>
+<script src="/js/scripts.js"></script>
 </body>
 </html>

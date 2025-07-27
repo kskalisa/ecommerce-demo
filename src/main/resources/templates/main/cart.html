@@ -4,31 +4,42 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Your Cart</title>
-    <link rel="stylesheet" href="/static/css/styles.css">
+    <link rel="stylesheet" href="/css/styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 </head>
 <body>
 <!-- Top Navigation Bar -->
-<header class="navbar">
-    <div class="navbar-left">
-        <span class="logo">E-Commerce</span>
-        <nav>
-            <a href="index.html">Home</a>
-            <a href="#">Categories</a>
-            <a href="#">Deals</a>
-            <a href="#">What's New</a>
-            <a href="#">Delivery</a>
-        </nav>
-    </div>
-    <div class="navbar-right">
-        <a href="account.html">Account</a>
-        <a href="cart.html" class="active">Cart</a>
-    </div>
-</header>
+<!--<header class="navbar">-->
+<!--    <div class="navbar-left">-->
+<!--        <span class="logo">E-Commerce</span>-->
+<!--        <nav>-->
+<!--            <a href="/">Home</a>-->
+<!--            <a href="#">Categories</a>-->
+<!--            <a href="#">Deals</a>-->
+<!--            <a href="#">What's New</a>-->
+<!--            <a href="#">Delivery</a>-->
+<!--        </nav>-->
+<!--    </div>-->
+<!--    <div class="navbar-right">-->
+<!--        <a href="account.html">Account</a>-->
+<!--        <a th:href="@{/cart}" class="active" style="position: relative;">-->
+<!--            Cart-->
+<!--            <span th:text="${session.cartCount}"-->
+<!--                  style="position: absolute; top: -8px; right: -15px;-->
+<!--                 background: red; color: white; border-radius: 50%;-->
+<!--                 padding: 2px 6px; font-size: 12px;"> </span>-->
+
+<!--        </a>-->
+<!--    </div>-->
+<!--</header>-->
+
+<div th:replace="fragments/header::siteHeader"></div>
+
+
 
 <!-- Breadcrumb -->
 <div class="breadcrumb">
-    <a href="index.html">Home</a> / Cart
+    <a href="/">Home</a> / Cart
 </div>
 
 <main class="cart-main">
@@ -36,81 +47,70 @@
     <div class="cart-container">
         <!-- Cart Items List -->
         <div class="cart-items-box card">
-            <div class="cart-item">
-                <img src="/static/img/airpods-max.png" alt="Airpods Max">
+
+
+            
+            
+            <div class="cart-item" th:each="item : ${cartItems}" >
+                <img th:src="@{'/images/' + ${item.product.image}}" alt="Airpods Max">
                 <div class="cart-item-info">
-                    <div class="cart-item-title">Airpods - Max</div>
+                    <div class="cart-item-title" th:text="${item.product.productName}">Airpods - Max</div>
                     <div class="cart-item-desc">Color: Grey</div>
-                    <div class="cart-item-desc">Quantity: 03</div>
+                    <div class="cart-item-desc" th:text="${item.quantity}">Quantity: 03</div>
                 </div>
-                <div class="cart-item-price">$205.00</div>
-                <button class="cart-remove-btn" onclick="alert('Removed from cart!')"><i class="fa-solid fa-trash"></i></button>
+                <b>$</b>&nbsp;<div class="cart-item-price" th:text="${item.product.price}">$205.00</div>
+
+                <form th:action="@{/remove-cart}" method="post">
+                    <input type="hidden" name="productId" th:value="${item.product.id}">
+                    <button type="submit" class="cart-remove-btn" onclick="alert('Removed from cart!')"><i class="fa-solid fa-trash"></i></button>
+                </form>
+
             </div>
-            <div class="cart-item">
-                <img src="/static/img/airpods-max.png" alt="Airpods Max">
-                <div class="cart-item-info">
-                    <div class="cart-item-title">Airpods - Max</div>
-                    <div class="cart-item-desc">Color: Grey</div>
-                    <div class="cart-item-desc">Quantity: 03</div>
-                </div>
-                <div class="cart-item-price">$205.00</div>
-                <button class="cart-remove-btn" onclick="alert('Removed from cart!')"><i class="fa-solid fa-trash"></i></button>
-            </div>
-            <div class="cart-item">
-                <img src="/static/img/airpods-max.png" alt="Airpods Max">
-                <div class="cart-item-info">
-                    <div class="cart-item-title">Airpods - Max</div>
-                    <div class="cart-item-desc">Color: Grey</div>
-                    <div class="cart-item-desc">Quantity: 03</div>
-                </div>
-                <div class="cart-item-price">$205.00</div>
-                <button class="cart-remove-btn" onclick="alert('Removed from cart!')"><i class="fa-solid fa-trash"></i></button>
-            </div>
-            <div class="cart-item">
-                <img src="/static/img/airpods-max.png" alt="Airpods Max">
-                <div class="cart-item-info">
-                    <div class="cart-item-title">Airpods - Max</div>
-                    <div class="cart-item-desc">Color: Grey</div>
-                    <div class="cart-item-desc">Quantity: 03</div>
-                </div>
-                <div class="cart-item-price">$205.00</div>
-                <button class="cart-remove-btn" onclick="alert('Removed from cart!')"><i class="fa-solid fa-trash"></i></button>
-            </div>
-            <div class="cart-item">
-                <img src="/static/img/airpods-max.png" alt="Airpods Max">
-                <div class="cart-item-info">
-                    <div class="cart-item-title">Airpods - Max</div>
-                    <div class="cart-item-desc">Color: Grey</div>
-                    <div class="cart-item-desc">Quantity: 03</div>
-                </div>
-                <div class="cart-item-price">$205.00</div>
-                <button class="cart-remove-btn" onclick="alert('Removed from cart!')"><i class="fa-solid fa-trash"></i></button>
-            </div>
+
+            <form th:action="@{/clear}" method="post">
+                <button type="submit"
+                        style="
+                        background-color: #dc3545;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 6px;
+        font-size: 16px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    "
+                        onmouseover="this.style.backgroundColor='#c82333'"
+                        onmouseout="this.style.backgroundColor='#dc3545'"
+
+             class="cart-remove" onclick="return confirm('Are you sure you want to clear all items from the cart?')">
+                   <i class="fa-solid fa-trash"></i> Clear All
+                </button>
+            </form>
         </div>
         <!-- Order Summary -->
         <div class="cart-summary-box card">
             <div class="cart-summary-row">
                 <span>Subtotal</span>
-                <span>$570</span>
+                <span th:text="${#numbers.formatDecimal(cartSummary.subtotal, 1, 'COMMA', 2, 'POINT')}">$570</span>
             </div>
             <div class="cart-summary-row">
                 <span>Discount(-20%)</span>
-                <span style="color: #e53935;">-$100</span>
+                <span style="color: #e53935;" th:text="${#numbers.formatDecimal(cartSummary.getDiscount, 1, 'COMMA', 2, 'POINT')}">-$100</span>
             </div>
             <div class="cart-summary-row">
                 <span>Delivery Free</span>
-                <span>$15</span>
+                <span th:text="${#numbers.formatDecimal(cartSummary.getDeliveryFee, 1,'COMMA', 2, 'POINT')}">$15</span>
             </div>
             <hr>
             <div class="cart-summary-row cart-summary-total">
                 <span>Total</span>
-                <span>$475</span>
+                <span th:text="${#numbers.formatDecimal(cartSummary.getTotal, 1, 'COMMA',2, 'POINT')}">$475</span>
             </div>
             <div class="cart-summary-promo">
                 <input type="text" placeholder="Enter promo code" disabled>
                 <button class="cart-summary-apply" disabled>Apply</button>
             </div>
-            <a href="checkout.html" class="cart-checkout-btn">
+            <a th:href="@{/checkout}" class="cart-checkout-btn">
                 Go to Checkout <span style="font-size:1.2em;vertical-align:middle;">&rarr;</span>
             </a>
         </div>
@@ -119,6 +119,6 @@
 <footer style="text-align:center;padding:2rem 0 1rem 0;color:#888;font-size:0.98rem;">
     &copy; 2025 E-Commerce. All rights reserved.
 </footer>
-<script src="/static/js/scripts.js"></script>
+<script src="/js/scripts.js"></script>
 </body>
 </html>

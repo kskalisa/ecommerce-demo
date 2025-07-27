@@ -1,6 +1,7 @@
 package com.ecommerce.assignment.controller;
 
 import com.ecommerce.assignment.model.CartItem;
+import com.ecommerce.assignment.model.CartSummary;
 import com.ecommerce.assignment.model.Product;
 import com.ecommerce.assignment.service.ProductService;
 import jakarta.servlet.http.HttpSession;
@@ -9,6 +10,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,8 +23,10 @@ public class CartController {
 
     public final ProductService productService;
 
-    @GetMapping("/Add-cart{ProductId}")
-    public String addCart(@PathVariable("ProductId") UUID productId, HttpSession session){
+    @PostMapping("/add-cart")
+    public String addCart(@RequestParam("productId") UUID productId
+            ,@RequestParam("quantity") int quantity, HttpSession session){
+
         List<CartItem> cartItems  = (List<CartItem>) session.getAttribute("cartItem");
         if(cartItems == null){
             cartItems = new ArrayList<>();
@@ -34,14 +39,14 @@ public class CartController {
 
             for(CartItem cartItem : cartItems){
                 if(cartItem.getProduct().getId().equals(productId)){
-                    cartItem.setQuantity(cartItem.getQuantity() + 1);
+                    cartItem.setQuantity(cartItem.getQuantity() + quantity);
                     itemExist = true;
                     break;
                 }
             }
 
             if(!itemExist){
-                cartItems.add(new CartItem(product,1));
+                cartItems.add(new CartItem(product,quantity));
             }
             session.setAttribute("cartItem", cartItems);
 
@@ -50,10 +55,37 @@ public class CartController {
     }
 
     @GetMapping("/cart")
-    public String showCart(HttpSession session, Model model){
+    public String showCart(HttpSession session, Model model) {
 
-        return null;
+        List<CartItem> cartItems = (List<CartItem>) session.getAttribute("cartItem");
+        if (cartItems == null) {
+            cartItems = new ArrayList<>();
+
+        }
+
+        CartSummary cartSummary = new CartSummary(cartItems);
+
+        model.addAttribute("cartItems", cartItems);
+        model.addAttribute("cartSummary", cartSummary);
+
+        return "main/cart";
+
     }
 
+    @PostMapping("/remove-cart")
+    public String removeCartItem(@RequestParam("productId") UUID productId, HttpSession session){
+        List<CartItem> cartItems = (List<CartItem>) session.getAttribute("cartItem");
+        if(cartItems != null){
+            cartItems.removeIf(cartItem -> cartItem.getProduct().getId().equals(productId));
+
+        }
+        return "redirect:/cart";
+    }
+
+    @PostMapping("/clear")
+    public String clearCart(HttpSession session){
+        session.removeAttribute("cartItem");
+        return "redirect:/cart";
+    }
 
 }
