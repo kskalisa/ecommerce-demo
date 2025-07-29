@@ -5,8 +5,11 @@ import com.ecommerce.assignment.model.CartItem;
 import com.ecommerce.assignment.model.Order;
 import com.ecommerce.assignment.model.OrderItem;
 import com.ecommerce.assignment.model.User;
+import com.ecommerce.assignment.model.Product;
 import com.ecommerce.assignment.repository.OrderRepo;
 import com.ecommerce.assignment.repository.UserRepo;
+import com.ecommerce.assignment.service.IProductService;
+
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -29,6 +32,7 @@ public class CheckoutController {
 
     private final UserRepo userService;
     private final OrderRepo orderRepo;
+    private final IProductService productService;
 
     @GetMapping("/checkout")
     public String checkoutPage(HttpSession session, Model model, Principal principal){
@@ -48,6 +52,7 @@ public class CheckoutController {
         if (principal == null) {
             return "redirect:/auth/signin";  // Not logged in
         }
+
 
         User user = userService.findByEmail(principal.getName()).orElseThrow();
 
@@ -72,6 +77,11 @@ public class CheckoutController {
             oi.setPrice(cartItem.getProduct().getPrice());
             oi.setOrder(order);
             orderItems.add(oi);
+
+            Product product = cartItem.getProduct();
+            int newQuantity = product.getQuantity() - cartItem.getQuantity();
+            product.setQuantity(newQuantity);
+            productService.updateProduct(product);
         }
 
         order.setItems(orderItems);

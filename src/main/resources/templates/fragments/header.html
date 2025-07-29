@@ -14,7 +14,22 @@
         <span class="logo">E-Commerce</span>
         <nav>
             <a th:href="@{/}" class="active">Home</a>
-            <a href="#">Categories</a>
+            <div class="dropdown-container">
+                <a href="#" class="dropdown-trigger">Categories <i class="fas fa-chevron-down ms-1 small"></i></a>
+                <div class="dropdown-menu">
+                    <div class="dropdown-content">
+                        <h6 class="dropdown-header">Popular Categories</h6>
+                        <a href="#" class="dropdown-item"><i class="fas fa-headphones me-2"></i> Headphones</a>
+                        <a href="#" class="dropdown-item"><i class="fas fa-laptop me-2"></i> Laptops</a>
+                        <a href="#" class="dropdown-item"><i class="fas fa-mobile-alt me-2"></i> Smartphones</a>
+                        <a href="#" class="dropdown-item"><i class="fas fa-tablet-alt me-2"></i> Tablets</a>
+                        <a href="#" class="dropdown-item"><i class="fas fa-tv me-2"></i> TVs</a>
+                        <a href="#" class="dropdown-item"><i class="fas fa-gamepad me-2"></i> Gaming</a>
+                        <div class="dropdown-divider"></div>
+                        <a href="#" class="dropdown-item text-primary">View All Categories <i class="fas fa-arrow-right ms-1"></i></a>
+                    </div>
+                </div>
+            </div>
             <a href="#">Deals</a>
             <a href="#">What's New</a>
             <a href="#">Delivery</a>

@@ -338,88 +338,38 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <!-- Example rows, repeat or use Thymeleaf th:each for dynamic data -->
-                    <tr>
-                        <td>#7192</td>
+                    <tr th:each="order : ${orders}">
+                        <td th:text="${order.id}">#1234</td>
+
                         <td>
-                            <div class="d-flex align-items-center">
-                                <img src="https://img.icons8.com/ios-filled/50/000000/jumper.png" class="product-img" alt="Sweater">
-                                <div>
-                                    <div style="font-weight:600;">Sweater</div>
-                                    <div style="font-size:0.92rem; color:#888;">Warm clothing</div>
+                            <div th:each="item : ${order.items}" class="mb-2">
+                                <div class="d-flex align-items-center">
+                                    <img th:src="${'/images/' + item.product.image}" class="product-img" alt="Product Image"/>
+                                    <div>
+                                        <div th:text="${item.product.productName}" style="font-weight:600;">Product Name</div>
+                                        <div style="font-size:0.9rem; color:#888;">
+                                            Qty: <span th:text="${item.quantity}">1</span>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </td>
-                        <td>Street 12, Kigali Rwanda</td>
-                        <td>20/03/2025</td>
-                        <td>4500</td>
-                        <td><span class="status-completed">● Completed</span></td>
-                    </tr>
-                    <tr>
-                        <td>#7192</td>
+
+                        <td th:text="${order.shippingAddress}">Shipping Address</td>
+                        <td th:text="${#temporals.format(order.orderDate, 'dd/MM/yyyy HH:mm')}">Order Date</td>
+
                         <td>
-                            <div class="d-flex align-items-center">
-                                <img src="https://img.icons8.com/ios-filled/50/000000/jumper.png" class="product-img" alt="Sweater">
-                                <div>
-                                    <div style="font-weight:600;">Sweater</div>
-                                    <div style="font-size:0.92rem; color:#888;">Warm clothing</div>
-                                </div>
+                            <div th:each="item : ${order.items}">
+                                <span th:text="${item.price * item.quantity}">Total</span><br/>
                             </div>
                         </td>
-                        <td>Street 12, Kigali Rwanda</td>
-                        <td>20/03/2025</td>
-                        <td>4500</td>
-                        <td><span class="status-pending">● Pending</span></td>
-                    </tr>
-                    <tr>
-                        <td>#7192</td>
+
                         <td>
-                            <div class="d-flex align-items-center">
-                                <img src="https://img.icons8.com/ios-filled/50/000000/jumper.png" class="product-img" alt="Sweater">
-                                <div>
-                                    <div style="font-weight:600;">Sweater</div>
-                                    <div style="font-size:0.92rem; color:#888;">Warm clothing</div>
-                                </div>
-                            </div>
+        <span th:text="${order.status}">
+            ● Status
+        </span>
                         </td>
-                        <td>Street 12, Kigali Rwanda</td>
-                        <td>20/03/2025</td>
-                        <td>4500</td>
-                        <td><span class="status-completed">● Completed</span></td>
                     </tr>
-                    <tr>
-                        <td>#7192</td>
-                        <td>
-                            <div class="d-flex align-items-center">
-                                <img src="https://img.icons8.com/ios-filled/50/000000/jumper.png" class="product-img" alt="Sweater">
-                                <div>
-                                    <div style="font-weight:600;">Sweater</div>
-                                    <div style="font-size:0.92rem; color:#888;">Warm clothing</div>
-                                </div>
-                            </div>
-                        </td>
-                        <td>Street 12, Kigali Rwanda</td>
-                        <td>20/03/2025</td>
-                        <td>4500</td>
-                        <td><span class="status-pending">● Pending</span></td>
-                    </tr>
-                    <tr>
-                        <td>#7192</td>
-                        <td>
-                            <div class="d-flex align-items-center">
-                                <img src="https://img.icons8.com/ios-filled/50/000000/jumper.png" class="product-img" alt="Sweater">
-                                <div>
-                                    <div style="font-weight:600;">Sweater</div>
-                                    <div style="font-size:0.92rem; color:#888;">Warm clothing</div>
-                                </div>
-                            </div>
-                        </td>
-                        <td>Street 12, Kigali Rwanda</td>
-                        <td>20/03/2025</td>
-                        <td>4500</td>
-                        <td><span class="status-completed">● Completed</span></td>
-                    </tr>
-                    <!-- Add more rows as needed -->
                     </tbody>
                 </table>
             </div>
