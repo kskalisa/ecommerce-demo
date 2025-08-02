@@ -27,6 +27,10 @@ public class MainController {
         model.addAttribute("products", products);
         return "main/index";
     }
+    @GetMapping("/userdash")
+    public String showDashboard(){
+        return "user/dashboard";
+    }
 
     @GetMapping("/product-details/{productId}")
     public String productDetails(@PathVariable("productId") UUID productId, Model model) {

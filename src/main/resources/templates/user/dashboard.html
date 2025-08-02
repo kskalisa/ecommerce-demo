@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Dashboard - E-Commerce</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <!-- Animate CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css">
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <style>
+        .dashboard-card {
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            overflow: hidden;
+        }
+        
+        .dashboard-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+        }
+        
+        .stat-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .stat-card.success {
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+        }
+        
+        .stat-card.warning {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+        
+        .stat-card.info {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        }
+        
+        .sidebar {
+            background: linear-gradient(180deg, #2c3e50 0%, #34495e 100%);
+            min-height: 100vh;
+            padding: 2rem 0;
+        }
+        
+        .sidebar .nav-link {
+            color: #ecf0f1;
+            padding: 1rem 1.5rem;
+            margin: 0.25rem 1rem;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+        
+        .sidebar .nav-link:hover,
+        .sidebar .nav-link.active {
+            background: rgba(52, 152, 219, 0.2);
+            color: #3498db;
+            transform: translateX(5px);
+        }
+        
+        .order-timeline {
+            position: relative;
+            padding-left: 2rem;
+        }
+        
+        .order-timeline::before {
+            content: '';
+            position: absolute;
+            left: 15px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: #e9ecef;
+        }
+        
+        .timeline-item {
+            position: relative;
+            margin-bottom: 2rem;
+        }
+        
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -23px;
+            top: 5px;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #28a745;
+            border: 3px solid white;
+            box-shadow: 0 0 0 3px #e9ecef;
+        }
+        
+        .recent-order {
+            border-left: 4px solid #007bff;
+            background: #f8f9fa;
+            border-radius: 0 10px 10px 0;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            transition: all 0.3s ease;
+        }
+        
+        .recent-order:hover {
+            background: #e9ecef;
+            transform: translateX(5px);
+        }
+        
+        .profile-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 2rem;
+            font-weight: bold;
+        }
+        
+        .quick-action {
+            background: white;
+            border: 2px solid #e9ecef;
+            border-radius: 15px;
+            padding: 1.5rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            color: #495057;
+        }
+        
+        .quick-action:hover {
+            border-color: #007bff;
+            color: #007bff;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0,123,255,0.15);
+        }
+        
+        .notification-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: #dc3545;
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            font-size: 0.75rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+    </style>
+</head>
+<body class="bg-light">
+
+<div th:replace="fragments/header::siteHeader"></div>
+
+<div class="container-fluid">
+    <div class="row">
+        <!-- Sidebar -->
+        <div class="col-lg-3 col-md-4 p-0">
+            <div class="sidebar">
+                <div class="text-center mb-4">
+                    <div class="profile-avatar mx-auto mb-3">
+                        <span th:text="${user.name != null ? user.name.substring(0,1).toUpperCase() : 'U'}">U</span>
+                    </div>
+                    <h5 class="text-white mb-1" th:text="${user.name ?: 'User Name'}">John Doe</h5>
+                    <small class="text-light" th:text="${user.email ?: 'user@example.com'}">john@example.com</small>
+                </div>
+                
+                <nav class="nav flex-column">
+                    <a class="nav-link active" href="#dashboard" data-section="dashboard">
+                        <i class="fas fa-tachometer-alt me-2"></i>Dashboard
+                    </a>
+                    <a class="nav-link" href="#orders" data-section="orders">
+                        <i class="fas fa-box me-2"></i>My Orders
+                        <span class="notification-badge">3</span>
+                    </a>
+                    <a class="nav-link" href="#profile" data-section="profile">
+                        <i class="fas fa-user me-2"></i>Profile Settings
+                    </a>
+                    <a class="nav-link" href="#addresses" data-section="addresses">
+                        <i class="fas fa-map-marker-alt me-2"></i>Addresses
+                    </a>
+                    <a class="nav-link" href="#wishlist" data-section="wishlist">
+                        <i class="fas fa-heart me-2"></i>Wishlist
+                        <span class="notification-badge">5</span>
+                    </a>
+                    <a class="nav-link" href="#payments" data-section="payments">
+                        <i class="fas fa-credit-card me-2"></i>Payment Methods
+                    </a>
+                    <a class="nav-link" href="#notifications" data-section="notifications">
+                        <i class="fas fa-bell me-2"></i>Notifications
+                        <span class="notification-badge">2</span>
+                    </a>
+                    <a class="nav-link" href="#support" data-section="support">
+                        <i class="fas fa-headset me-2"></i>Support
+                    </a>
+                </nav>
+            </div>
+        </div>
+        
+        <!-- Main Content -->
+        <div class="col-lg-9 col-md-8 p-4">
+            <!-- Dashboard Section -->
+            <div id="dashboard" class="content-section">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h2 class="fw-bold">Dashboard Overview</h2>
+                    <div class="text-muted">
+                        <i class="fas fa-calendar me-2"></i>
+                        <span th:text="${#temporals.format(#temporals.createNow(), 'MMM dd, yyyy')}">Jan 15, 2025</span>
+                    </div>
+                </div>
+                
+                <!-- Statistics Cards -->
+                <div class="row mb-4">
+                    <div class="col-lg-3 col-md-6 mb-3">
+                        <div class="stat-card animate__animated animate__fadeInUp">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h3 class="mb-1" th:text="${orderStats.totalOrders ?: '12'}">12</h3>
+                                    <p class="mb-0">Total Orders</p>
+                                </div>
+                                <i class="fas fa-shopping-cart fa-2x opacity-75"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6 mb-3">
+                        <div class="stat-card success animate__animated animate__fadeInUp" style="animation-delay: 0.1s">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h3 class="mb-1" th:text="'$' + ${orderStats.totalSpent ?: '1,250'}">$1,250</h3>
+                                    <p class="mb-0">Total Spent</p>
+                                </div>
+                                <i class="fas fa-dollar-sign fa-2x opacity-75"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6 mb-3">
+                        <div class="stat-card warning animate__animated animate__fadeInUp" style="animation-delay: 0.2s">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h3 class="mb-1" th:text="${orderStats.pendingOrders ?: '3'}">3</h3>
+                                    <p class="mb-0">Pending Orders</p>
+                                </div>
+                                <i class="fas fa-clock fa-2x opacity-75"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6 mb-3">
+                        <div class="stat-card info animate__animated animate__fadeInUp" style="animation-delay: 0.3s">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h3 class="mb-1" th:text="${wishlistStats.itemCount ?: '8'}">8</h3>
+                                    <p class="mb-0">Wishlist Items</p>
+                                </div>
+                                <i class="fas fa-heart fa-2x opacity-75"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Quick Actions -->
+                <div class="row mb-4">
+                    <div class="col-12">
+                        <h4 class="fw-bold mb-3">Quick Actions</h4>
+                    </div>
+                    <div class="col-lg-2 col-md-4 col-6 mb-3">
+                        <a href="#orders" class="quick-action d-block" data-section="orders">
+                            <i class="fas fa-plus-circle fa-2x mb-2 text-primary"></i>
+                            <h6 class="mb-0">Track Order</h6>
+                        </a>
+                    </div>
+                    <div class="col-lg-2 col-md-4 col-6 mb-3">
+                        <a th:href="@{/}" class="quick-action d-block">
+                            <i class="fas fa-shopping-bag fa-2x mb-2 text-success"></i>
+                            <h6 class="mb-0">Shop Now</h6>
+                        </a>
+                    </div>
+                    <div class="col-lg-2 col-md-4 col-6 mb-3">
+                        <a href="#wishlist" class="quick-action d-block" data-section="wishlist">
+                            <i class="fas fa-heart fa-2x mb-2 text-danger"></i>
+                            <h6 class="mb-0">Wishlist</h6>
+                        </a>
+                    </div>
+                    <div class="col-lg-2 col-md-4 col-6 mb-3">
+                        <a href="#profile" class="quick-action d-block" data-section="profile">
+                            <i class="fas fa-user-edit fa-2x mb-2 text-warning"></i>
+                            <h6 class="mb-0">Edit Profile</h6>
+                        </a>
+                    </div>
+                    <div class="col-lg-2 col-md-4 col-6 mb-3">
+                        <a href="#support" class="quick-action d-block" data-section="support">
+                            <i class="fas fa-headset fa-2x mb-2 text-info"></i>
+                            <h6 class="mb-0">Support</h6>
+                        </a>
+                    </div>
+                    <div class="col-lg-2 col-md-4 col-6 mb-3">
+                        <a href="#addresses" class="quick-action d-block" data-section="addresses">
+                            <i class="fas fa-map-marker-alt fa-2x mb-2 text-secondary"></i>
+                            <h6 class="mb-0">Addresses</h6>
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Recent Orders & Activity -->
+                <div class="row">
+                    <div class="col-lg-8 mb-4">
+                        <div class="dashboard-card">
+                            <div class="card-header bg-white border-0 pb-0">
+                                <h5 class="fw-bold mb-0">Recent Orders</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="recent-order" th:each="order : ${recentOrders}">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div>
+                                            <h6 class="mb-1">Order #<span th:text="${order.id}">12345</span></h6>
+                                            <p class="mb-1 text-muted" th:text="${#temporals.format(order.orderDate, 'MMM dd, yyyy')}">Jan 10, 2025</p>
+                                            <span class="badge bg-success" th:text="${order.status}">Delivered</span>
+                                        </div>
+                                        <div class="text-end">
+                                            <h6 class="mb-1" th:text="'$' + ${order.totalAmount}">$299.99</h6>
+                                            <a th:href="@{/order-confirmation(id=${order.id})}" class="btn btn-sm btn-outline-primary">View</a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="text-center mt-3">
+                                    <a href="#orders" class="btn btn-primary" data-section="orders">View All Orders</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-lg-4 mb-4">
+                        <div class="dashboard-card">
+                            <div class="card-header bg-white border-0 pb-0">
+                                <h5 class="fw-bold mb-0">Order Activity</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="order-timeline">
+                                    <div class="timeline-item">
+                                        <h6 class="mb-1">Order Shipped</h6>
+                                        <p class="mb-1 text-muted">Order #12345 has been shipped</p>
+                                        <small class="text-muted">2 hours ago</small>
+                                    </div>
+                                    <div class="timeline-item">
+                                        <h6 class="mb-1">Payment Confirmed</h6>
+                                        <p class="mb-1 text-muted">Payment for order #12344 confirmed</p>
+                                        <small class="text-muted">1 day ago</small>
+                                    </div>
+                                    <div class="timeline-item">
+                                        <h6 class="mb-1">Order Placed</h6>
+                                        <p class="mb-1 text-muted">New order #12343 placed successfully</p>
+                                        <small class="text-muted">3 days ago</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Orders Section -->
+            <div id="orders" class="content-section" style="display: none;">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h2 class="fw-bold">My Orders</h2>
+                    <div class="d-flex gap-2">
+                        <select class="form-select" style="width: auto;">
+                            <option>All Orders</option>
+                            <option>Pending</option>
+                            <option>Processing</option>
+                            <option>Shipped</option>
+                            <option>Delivered</option>
+                            <option>Cancelled</option>
+                        </select>
+                        <input type="text" class="form-control" placeholder="Search orders..." style="width: 200px;">
+                    </div>
+                </div>
+                
+                <div class="dashboard-card">
+                    <div class="card-body p-0">
+                        <div class="table-responsive">
+                            <table class="table table-hover mb-0">
+                                <thead class="bg-light">
+                                    <tr>
+                                        <th class="border-0 fw-bold">Order ID</th>
+                                        <th class="border-0 fw-bold">Date</th>
+                                        <th class="border-0 fw-bold">Status</th>
+                                        <th class="border-0 fw-bold">Total</th>
+                                        <th class="border-0 fw-bold">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr th:each="order : ${userOrders}">
+                                        <td class="fw-medium">#<span th:text="${order.id}">12345</span></td>
+                                        <td th:text="${#temporals.format(order.orderDate, 'MMM dd, yyyy')}">Jan 15, 2025</td>
+                                        <td>
+                                            <span class="badge bg-success" th:text="${order.status}">Delivered</span>
+                                        </td>
+                                        <td class="fw-bold" th:text="'$' + ${order.totalAmount}">$299.99</td>
+                                        <td>
+                                            <div class="btn-group btn-group-sm">
+                                                <a th:href="@{/order-confirmation(id=${order.id})}" class="btn btn-outline-primary">
+                                                    <i class="fas fa-eye"></i>
+                                                </a>
+                                                <button class="btn btn-outline-success" onclick="trackOrder()">
+                                                    <i class="fas fa-truck"></i>
+                                                </button>
+                                                <button class="btn btn-outline-secondary" onclick="downloadInvoice()">
+                                                    <i class="fas fa-download"></i>
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Profile Section -->
+            <div id="profile" class="content-section" style="display: none;">
+                <h2 class="fw-bold mb-4">Profile Settings</h2>
+                
+                <div class="row">
+                    <div class="col-lg-8">
+                        <div class="dashboard-card">
+                            <div class="card-header bg-white border-0">
+                                <h5 class="fw-bold mb-0">Personal Information</h5>
+                            </div>
+                            <div class="card-body">
+                                <form>
+                                    <div class="row">
+                                        <div class="col-md-6 mb-3">
+                                            <label class="form-label fw-medium">First Name</label>
+                                            <input type="text" class="form-control" th:value="${user.firstName}" placeholder="John">
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label class="form-label fw-medium">Last Name</label>
+                                            <input type="text" class="form-control" th:value="${user.lastName}" placeholder="Doe">
+                                        </div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label fw-medium">Email Address</label>
+                                        <input type="email" class="form-control" th:value="${user.email}" placeholder="john@example.com">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label fw-medium">Phone Number</label>
+                                        <input type="tel" class="form-control" th:value="${user.phone}" placeholder="+250 123 456 789">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label fw-medium">Date of Birth</label>
+                                        <input type="date" class="form-control" th:value="${user.dateOfBirth}">
+                                    </div>
+                                    <button type="submit" class="btn btn-primary">
+                                        <i class="fas fa-save me-2"></i>Save Changes
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-lg-4">
+                        <div class="dashboard-card">
+                            <div class="card-header bg-white border-0">
+                                <h5 class="fw-bold mb-0">Profile Picture</h5>
+                            </div>
+                            <div class="card-body text-center">
+                                <div class="profile-avatar mx-auto mb-3" style="width: 120px; height: 120px; font-size: 3rem;">
+                                    <span th:text="${user.name != null ? user.name.substring(0,1).toUpperCase() : 'U'}">J</span>
+                                </div>
+                                <button class="btn btn-outline-primary mb-2">
+                                    <i class="fas fa-camera me-2"></i>Change Photo
+                                </button>
+                                <p class="text-muted small">JPG, PNG or GIF. Max size 2MB</p>
+                            </div>
+                        </div>
+                        
+                        <div class="dashboard-card mt-3">
+                            <div class="card-header bg-white border-0">
+                                <h5 class="fw-bold mb-0">Security</h5>
+                            </div>
+                            <div class="card-body">
+                                <button class="btn btn-outline-warning w-100 mb-2">
+                                    <i class="fas fa-key me-2"></i>Change Password
+                                </button>
+                                <button class="btn btn-outline-info w-100">
+                                    <i class="fas fa-shield-alt me-2"></i>Two-Factor Auth
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Other sections (addresses, wishlist, etc.) would follow similar patterns -->
+            <!-- ... existing code ... -->
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    // Dashboard functionality
+    document.addEventListener('DOMContentLoaded', function() {
+        // Section navigation
+        const navLinks = document.querySelectorAll('.nav-link[data-section]');
+        const sections = document.querySelectorAll('.content-section');
+        
+        navLinks.forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                // Remove active class from all links
+                navLinks.forEach(l => l.classList.remove('active'));
+                // Add active class to clicked link
+                this.classList.add('active');
+                
+                // Hide all sections
+                sections.forEach(section => section.style.display = 'none');
+                // Show target section
+                const targetSection = document.getElementById(this.dataset.section);
+                if (targetSection) {
+                    targetSection.style.display = 'block';
+                }
+            });
+        });
+        
+        // Quick action navigation
+        const quickActions = document.querySelectorAll('.quick-action[data-section]');
+        quickActions.forEach(action => {
+            action.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                // Remove active class from all nav links
+                navLinks.forEach(l => l.classList.remove('active'));
+                // Add active class to corresponding nav link
+                const targetNavLink = document.querySelector(`[data-section="${this.dataset.section}"]`);
+                if (targetNavLink) {
+                    targetNavLink.classList.add('active');
+                }
+                
+                // Hide all sections
+                sections.forEach(section => section.style.display = 'none');
+                // Show target section
+                const targetSection = document.getElementById(this.dataset.section);
+                if (targetSection) {
+                    targetSection.style.display = 'block';
+                }
+            });
+        });
+    });
+    
+    // Utility functions
+    function trackOrder() {
+        alert('Order tracking functionality would be implemented here');
+    }
+    
+    function downloadInvoice() {
+        alert('Invoice download functionality would be implemented here');
+    }
+</script>
+</body>
+</html>

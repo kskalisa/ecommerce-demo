@@ -3,50 +3,127 @@
 <head>
 <title>Ecommerce Demo</title>
     <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="/css/modern-header.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 </head>
 <body>
-<!-- Top Navigation Bar -->
+<!-- Enhanced Top Navigation Bar -->
 <div th:fragment="siteHeader">
 
-<header class="navbar">
-    <div class="navbar-left">
-        <span class="logo">E-Commerce</span>
-        <nav>
-            <a th:href="@{/}" class="active">Home</a>
-            <div class="dropdown-container">
-                <a href="#" class="dropdown-trigger">Categories <i class="fas fa-chevron-down ms-1 small"></i></a>
-                <div class="dropdown-menu">
-                    <div class="dropdown-content">
-                        <h6 class="dropdown-header">Popular Categories</h6>
-                        <a href="#" class="dropdown-item"><i class="fas fa-headphones me-2"></i> Headphones</a>
-                        <a href="#" class="dropdown-item"><i class="fas fa-laptop me-2"></i> Laptops</a>
-                        <a href="#" class="dropdown-item"><i class="fas fa-mobile-alt me-2"></i> Smartphones</a>
-                        <a href="#" class="dropdown-item"><i class="fas fa-tablet-alt me-2"></i> Tablets</a>
-                        <a href="#" class="dropdown-item"><i class="fas fa-tv me-2"></i> TVs</a>
-                        <a href="#" class="dropdown-item"><i class="fas fa-gamepad me-2"></i> Gaming</a>
-                        <div class="dropdown-divider"></div>
-                        <a href="#" class="dropdown-item text-primary">View All Categories <i class="fas fa-arrow-right ms-1"></i></a>
-                    </div>
+<!-- Top Info Bar -->
+<div class="top-info-bar">
+    <div class="container">
+        <div class="top-info-content">
+            <div class="top-info-left">
+                <span><i class="fas fa-phone"></i> +250 788 123 456</span>
+                <span><i class="fas fa-envelope"></i> info@ecommerce.rw</span>
+            </div>
+            <div class="top-info-right">
+                <span><i class="fas fa-truck"></i> Free shipping on orders over $50</span>
+                <div class="language-selector">
+                    <i class="fas fa-globe"></i>
+                    <select>
+                        <option>EN</option>
+                        <option>ES</option>
+                        <option>FR</option>
+                    </select>
                 </div>
             </div>
-            <a href="#">Deals</a>
-            <a href="#">What's New</a>
-            <a href="#">Delivery</a>
-        </nav>
+        </div>
     </div>
-    <div class="navbar-right">
-        <a th:href="@{/auth/signin}">Account</a>
-        <a th:href="@{cart}">
-            Cart
-            <span th:text="${cartCount}"
-                  style="position: absolute; top: -8px; right: -15px; font-size: 12px; background: #e74c3c; color: #fff; padding: 0 5px; border-radius: 50%;">
+</div>
 
-            </span>
+<!-- Main Header -->
+<header class="main-header">
+    <div class="container">
+        <div class="header-content">
+            <!-- Logo Section -->
+            <div class="logo-section">
+                <div class="logo-wrapper">
+                    <i class="fas fa-shopping-bag logo-icon"></i>
+                    <span class="logo-text">E-Commerce</span>
+                </div>
+                <span class="logo-tagline">Your trusted shopping partner</span>
+            </div>
 
-        </a>
+            <!-- Search Bar -->
+            <div class="search-section">
+                <form class="search-form">
+                    <div class="search-wrapper">
+                        <input type="text" placeholder="Search for products, brands and more..." class="search-input">
+                        <button type="submit" class="search-btn">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- User Actions -->
+            <div class="user-actions">
+                <!-- Wishlist -->
+                <div class="action-item">
+                    <a href="#" class="action-link">
+                        <i class="fas fa-heart"></i>
+                        <span class="action-text">Wishlist</span>
+                        <span class="badge wishlist-count">3</span>
+                    </a>
+                </div>
+
+                <!-- Account -->
+                <div class="action-item">
+                    <a th:href="@{/auth/signin}" class="action-link">
+                        <i class="fas fa-user"></i>
+                        <span class="action-text">Account</span>
+                    </a>
+                </div>
+
+                <!-- Cart -->
+                <div class="action-item">
+                    <a th:href="@{/cart}" class="action-link cart-link">
+                        <i class="fas fa-shopping-cart"></i>
+                        <span class="action-text">Cart</span>
+                        <span class="badge cart-count" th:text="${cartCount}">0</span>
+                    </a>
+                </div>
+            </div>
+        </div>
     </div>
 </header>
+
+<!-- Navigation Menu -->
+<nav class="main-navigation">
+    <div class="container">
+        <div class="nav-content">
+            <div class="nav-left">
+                <a th:href="@{/}" class="nav-link active">
+                    <i class="fas fa-home"></i>
+                    <span>Home</span>
+                </a>
+                
+                <a href="#" class="nav-link">
+                    <i class="fas fa-th-large"></i>
+                    <span>Categories</span>
+                </a>
+
+                <a href="#" class="nav-link">
+                    <i class="fas fa-fire"></i>
+                    <span>Hot Deals</span>
+                </a>
+                
+                <a href="#" class="nav-link">
+                    <i class="fas fa-star"></i>
+                    <span>What's New</span>
+                </a>
+                
+                <a href="#" class="nav-link">
+                    <i class="fas fa-truck"></i>
+                    <span>Delivery</span>
+                </a>
+            </div>
+        </div>
+    </div>
+</nav>
+
 </div>
 </body>
 </html>

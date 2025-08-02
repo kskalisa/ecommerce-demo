@@ -28,21 +28,10 @@ public class ProductController {
     private final CategoryService categoryService;
 
 
-//    @GetMapping("/All")
-//    public String getProducts(Model model){
-//        List<Product> products = productService.findProductByState(Boolean.TRUE);
-//        model.addAttribute("products", products);
-//        return "products";
-//    }
-//
-//    @GetMapping("/allProduct")
-//    public String showProducts(Model model){
-//        model.addAttribute("product", new Product());
-//        return "products";
-//    }
 
     @GetMapping("/All")
-    public String showProductPage(Model model) {
+    public String showProductPage(
+        Model model) {
         List<Product> products = productService.findProductByState(Boolean.TRUE);
         model.addAttribute("products", products);
         model.addAttribute("product", new Product());
@@ -114,26 +103,6 @@ public class ProductController {
 
         }
     }
-
-//    @PostMapping("/updateProduct")
-//    public String updateProduct(@ModelAttribute("product") Product product,
-//                                @RequestParam("imageFile") MultipartFile imageFile,
-//                                Model model) {
-//        try {
-//            if (!imageFile.isEmpty()) {
-//                String fileName = StringUtils.cleanPath(Objects.requireNonNull(imageFile.getOriginalFilename()));
-//                product.setImage(fileName);
-//            }
-//
-//            productService.updateProduct(product);
-//            model.addAttribute("message", "Product updated successfully");
-//            return "redirect:/products/All";
-//        } catch (Exception e) {
-//            model.addAttribute("error", "Product update failed");
-//            return "products";
-//        }
-//    }
-
 
 
     @GetMapping("/delete")

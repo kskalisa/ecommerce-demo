@@ -1,49 +1,529 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sign Up</title>
-  <link rel="stylesheet" href="/css/styles.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up - E-Commerce</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <!-- Swiper CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css" />
+    <!-- Animate CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css">
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="/css/modern-styles.css">
+    
+    <style>
+        body {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .auth-container {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            padding: 3rem;
+            max-width: 500px;
+            width: 100%;
+            margin: auto;
+        }
+        
+        .auth-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        
+        .auth-logo {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #28a745, #20c997);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            animation: pulse 2s infinite;
+        }
+        
+        .auth-logo i {
+            font-size: 2rem;
+            color: white;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        .auth-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 0.5rem;
+        }
+        
+        .auth-subtitle {
+            color: #666;
+            font-size: 1rem;
+        }
+        
+        .form-floating {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-floating .form-control {
+            border: 2px solid #e9ecef;
+            border-radius: 12px;
+            padding: 1rem 0.75rem;
+            height: auto;
+            transition: all 0.3s ease;
+        }
+        
+        .form-floating .form-control:focus {
+            border-color: #28a745;
+            box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25);
+        }
+        
+        .form-floating .form-control.is-invalid {
+            border-color: #dc3545;
+        }
+        
+        .form-floating label {
+            color: #666;
+            font-weight: 500;
+        }
+        
+        .btn-auth {
+            background: linear-gradient(135deg, #28a745, #20c997);
+            border: none;
+            border-radius: 12px;
+            padding: 1rem;
+            font-weight: 600;
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            transition: all 0.3s ease;
+            width: 100%;
+            margin-bottom: 1.5rem;
+        }
+        
+        .btn-auth:hover {
+            background: linear-gradient(135deg, #20c997, #17a2b8);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(40,167,69,0.3);
+        }
+        
+        .auth-links {
+            text-align: center;
+        }
+        
+        .auth-link {
+            color: #666;
+            margin-bottom: 1rem;
+        }
+        
+        .auth-link a {
+            color: #28a745;
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s ease;
+        }
+        
+        .auth-link a:hover {
+            color: #20c997;
+        }
+        
+        .divider {
+            display: flex;
+            align-items: center;
+            margin: 1.5rem 0;
+        }
+        
+        .divider::before,
+        .divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: #e9ecef;
+        }
+        
+        .divider span {
+            padding: 0 1rem;
+            color: #666;
+            font-size: 0.9rem;
+        }
+        
+        .social-login {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .btn-social {
+            flex: 1;
+            padding: 0.75rem;
+            border: 2px solid #e9ecef;
+            border-radius: 12px;
+            background: white;
+            color: #666;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-social:hover {
+            border-color: #28a745;
+            color: #28a745;
+            transform: translateY(-2px);
+        }
+        
+        .alert {
+            border-radius: 12px;
+            border: none;
+            margin-bottom: 1.5rem;
+        }
+        
+        .error {
+            color: #dc3545;
+            font-size: 0.875rem;
+            margin-top: 0.25rem;
+            margin-bottom: 1rem;
+        }
+        
+        .password-strength {
+            margin-top: 0.5rem;
+        }
+        
+        .strength-bar {
+            height: 4px;
+            border-radius: 2px;
+            background: #e9ecef;
+            overflow: hidden;
+        }
+        
+        .strength-fill {
+            height: 100%;
+            transition: all 0.3s ease;
+            width: 0%;
+        }
+        
+        .strength-weak { background: #dc3545; width: 25%; }
+        .strength-fair { background: #ffc107; width: 50%; }
+        .strength-good { background: #17a2b8; width: 75%; }
+        .strength-strong { background: #28a745; width: 100%; }
+        
+        .floating-shapes {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+        
+        .shape {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        .shape:nth-child(1) {
+            width: 80px;
+            height: 80px;
+            top: 10%;
+            left: 10%;
+            animation-delay: 0s;
+        }
+        
+        .shape:nth-child(2) {
+            width: 120px;
+            height: 120px;
+            top: 70%;
+            right: 10%;
+            animation-delay: 2s;
+        }
+        
+        .shape:nth-child(3) {
+            width: 60px;
+            height: 60px;
+            bottom: 20%;
+            left: 20%;
+            animation-delay: 4s;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+        
+        @media (max-width: 576px) {
+            .auth-container {
+                margin: 1rem;
+                padding: 2rem 1.5rem;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="/css/modern-header.css">
 </head>
 <body>
+
+<div class="floating-shapes">
+    <div class="shape"></div>
+    <div class="shape"></div>
+    <div class="shape"></div>
+</div>
+
 <div th:replace="fragments/header::siteHeader"></div>
-<main class="auth-main">
-  <div class="auth-container">
-    <h2>Create Account</h2>
-    <form class="auth-form" th:action="@{/auth/register}" th:object="${user}" method="post">
-      <div th:if="${#fields.hasGlobalErrors()}" class="alert alert-danger">
-        <p th:each="err: ${#fields.globalErrors()}" th:text="${err}">Global Error</p>
-      </div>
 
-      <label>Name</label>
-      <input type="text" placeholder="Enter your name" th:field="*{username}">
-      <div class="error" th:if="${#fields.hasErrors('username')}" th:errors="*{username}"></div>
-      <label>Email</label>
-      <input type="email" placeholder="Enter your email" th:field="*{email}">
-      <div class="error" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
-
-      <label>Password</label>
-      <input type="password" placeholder="Enter your password" th:field="*{password}">
-      <div class="error" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></div>
-
-      <label>Confirm Password</label>
-      <input type="password" placeholder="Confirm your password" th:field="*{confirmPassword}">
-      <div class="error" th:if="${#fields.hasErrors('confirmPassword')}" th:errors="*{confirmPassword}"></div>
-
-      <button type="submit" class="auth-btn">Sign Up</button>
-    </form>
-    <div class="auth-link">Already have an account? <a th:href="@{/auth/signin}">Login</a></div>
-    <div th:if="${message}" class="success-message" style="color: green">
-      <p th:text="${message}"></p>
+<main class="flex-grow-1 d-flex align-items-center py-5">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-6 col-lg-5">
+                <div class="auth-container animate__animated animate__fadeIn">
+                    <div class="auth-header">
+                        <div class="auth-logo">
+                            <i class="fas fa-user-plus"></i>
+                        </div>
+                        <h1 class="auth-title">Create Account</h1>
+                        <p class="auth-subtitle">Join us today and start shopping</p>
+                    </div>
+                    
+                    <form th:action="@{/auth/register}" th:object="${user}" method="post">
+                        <div th:if="${#fields.hasGlobalErrors()}" class="alert alert-danger">
+                            <p th:each="err: ${#fields.globalErrors()}" th:text="${err}">Global Error</p>
+                        </div>
+                        
+                        <div class="form-floating">
+                            <input type="text" class="form-control" id="username" th:field="*{username}" 
+                                   th:classappend="${#fields.hasErrors('username')} ? 'is-invalid' : ''" 
+                                   placeholder="Full Name" required>
+                            <label for="username"><i class="fas fa-user me-2"></i>Full Name</label>
+                            <div class="error" th:if="${#fields.hasErrors('username')}" th:errors="*{username}"></div>
+                        </div>
+                        
+                        <div class="form-floating">
+                            <input type="email" class="form-control" id="email" th:field="*{email}" 
+                                   th:classappend="${#fields.hasErrors('email')} ? 'is-invalid' : ''" 
+                                   placeholder="name@example.com" required>
+                            <label for="email"><i class="fas fa-envelope me-2"></i>Email Address</label>
+                            <div class="error" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
+                        </div>
+                        
+                        <div class="form-floating">
+                            <input type="password" class="form-control" id="password" th:field="*{password}" 
+                                   th:classappend="${#fields.hasErrors('password')} ? 'is-invalid' : ''" 
+                                   placeholder="Password" required onkeyup="checkPasswordStrength(this.value)">
+                            <label for="password"><i class="fas fa-lock me-2"></i>Password</label>
+                            <div class="password-strength">
+                                <div class="strength-bar">
+                                    <div class="strength-fill" id="strengthBar"></div>
+                                </div>
+                                <small class="text-muted" id="strengthText">Password strength</small>
+                            </div>
+                            <div class="error" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></div>
+                        </div>
+                        
+                        <div class="form-floating">
+                            <input type="password" class="form-control" id="confirmPassword" th:field="*{confirmPassword}" 
+                                   th:classappend="${#fields.hasErrors('confirmPassword')} ? 'is-invalid' : ''" 
+                                   placeholder="Confirm Password" required>
+                            <label for="confirmPassword"><i class="fas fa-lock me-2"></i>Confirm Password</label>
+                            <div class="error" th:if="${#fields.hasErrors('confirmPassword')}" th:errors="*{confirmPassword}"></div>
+                        </div>
+                        
+                        <div class="form-check mb-3">
+                            <input class="form-check-input" type="checkbox" id="terms" required>
+                            <label class="form-check-label" for="terms">
+                                I agree to the <a href="#" class="text-decoration-none">Terms of Service</a> and <a href="#" class="text-decoration-none">Privacy Policy</a>
+                            </label>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-success btn-auth">
+                            <i class="fas fa-user-plus me-2"></i>Create Account
+                        </button>
+                    </form>
+                    
+                    <div th:if="${message}" class="alert alert-success" th:text="${message}"></div>
+                    
+                    <div class="divider">
+                        <span>or sign up with</span>
+                    </div>
+                    
+                    <div class="social-login">
+                        <a href="#" class="btn-social">
+                            <i class="fab fa-google"></i>
+                        </a>
+                        <a href="#" class="btn-social">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                        <a href="#" class="btn-social">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                    </div>
+                    
+                    <div class="auth-links">
+                        <div class="auth-link">
+                            Already have an account? <a th:href="@{/auth/signin}">Sign In</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-
-  </div>
 </main>
-<footer style="text-align:center;padding:2rem 0 1rem 0;color:#888;font-size:0.98rem;">
-  &copy; 2025 E-Commerce. All rights reserved.
+
+<!-- Footer -->
+<footer class="bg-dark text-white pt-5 pb-3 mt-auto">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-3 col-md-6 mb-4">
+                <h5 class="fw-bold mb-3">
+                    <i class="fas fa-shopping-bag me-2 text-success"></i>E-Commerce
+                </h5>
+                <p class="text-light mb-3">Join thousands of satisfied customers and discover amazing deals on premium electronics.</p>
+                <div class="d-flex gap-3 mt-3">
+                    <a href="#" class="text-white fs-5 hover-effect"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" class="text-white fs-5 hover-effect"><i class="fab fa-twitter"></i></a>
+                    <a href="#" class="text-white fs-5 hover-effect"><i class="fab fa-instagram"></i></a>
+                    <a href="#" class="text-white fs-5 hover-effect"><i class="fab fa-youtube"></i></a>
+                    <a href="#" class="text-white fs-5 hover-effect"><i class="fab fa-linkedin"></i></a>
+                </div>
+            </div>
+            <div class="col-lg-2 col-md-6 mb-4">
+                <h5 class="fw-bold mb-3">Shop</h5>
+                <ul class="list-unstyled">
+                    <li class="mb-2"><a href="#" class="text-light text-decoration-none hover-link">Smartphones</a></li>
+                    <li class="mb-2"><a href="#" class="text-light text-decoration-none hover-link">Laptops</a></li>
+                    <li class="mb-2"><a href="#" class="text-light text-decoration-none hover-link">Headphones</a></li>
+                    <li class="mb-2"><a href="#" class="text-light text-decoration-none hover-link">Accessories</a></li>
+                    <li class="mb-2"><a href="#" class="text-light text-decoration-none hover-link">Gaming</a></li>
+                </ul>
+            </div>
+            <div class="col-lg-2 col-md-6 mb-4">
+                <h5 class="fw-bold mb-3">Get Started</h5>
+                <ul class="list-unstyled">
+                    <li class="mb-2"><a th:href="@{/auth/signup}" class="text-light text-decoration-none hover-link"><i class="fas fa-user-plus me-2"></i>Create Account</a></li>
+                    <li class="mb-2"><a th:href="@{/auth/login}" class="text-light text-decoration-none hover-link"><i class="fas fa-sign-in-alt me-2"></i>Login</a></li>
+                    <li class="mb-2"><a href="#" class="text-light text-decoration-none hover-link"><i class="fas fa-gift me-2"></i>Special Offers</a></li>
+                    <li class="mb-2"><a href="#" class="text-light text-decoration-none hover-link"><i class="fas fa-star me-2"></i>Rewards Program</a></li>
+                    <li class="mb-2"><a href="#" class="text-light text-decoration-none hover-link"><i class="fas fa-mobile-alt me-2"></i>Mobile App</a></li>
+                </ul>
+            </div>
+            <div class="col-lg-2 col-md-6 mb-4">
+                <h5 class="fw-bold mb-3">Support</h5>
+                <ul class="list-unstyled">
+                    <li class="mb-2"><a href="#" class="text-light text-decoration-none hover-link">Contact Us</a></li>
+                    <li class="mb-2"><a href="#" class="text-light text-decoration-none hover-link">FAQs</a></li>
+                    <li class="mb-2"><a href="#" class="text-light text-decoration-none hover-link">Shipping Info</a></li>
+                    <li class="mb-2"><a href="#" class="text-light text-decoration-none hover-link">Returns</a></li>
+                    <li class="mb-2"><a href="#" class="text-light text-decoration-none hover-link">Terms of Service</a></li>
+                </ul>
+            </div>
+            <div class="col-lg-3 col-md-6 mb-4">
+                <h5 class="fw-bold mb-3">Stay Connected</h5>
+                <p class="text-light mb-3">Subscribe to get special offers, free giveaways, and exclusive deals.</p>
+                <div class="mb-3">
+                    <div class="input-group">
+                        <input type="email" class="form-control" placeholder="Enter your email">
+                        <button class="btn btn-success" type="button">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </div>
+                </div>
+                <ul class="list-unstyled">
+                    <li class="mb-2 text-light"><i class="fas fa-map-marker-alt me-2 text-success"></i> 123 Commerce St, Kigali</li>
+                    <li class="mb-2 text-light"><i class="fas fa-phone me-2 text-success"></i> +250 788 123 456</li>
+                    <li class="mb-2 text-light"><i class="fas fa-envelope me-2 text-success"></i> info@ecommerce.rw</li>
+                </ul>
+            </div>
+        </div>
+        <hr class="my-4 border-secondary">
+        <div class="row align-items-center">
+            <div class="col-md-6 text-center text-md-start">
+                <p class="mb-0 text-light">&copy; 2025 E-Commerce Rwanda. All rights reserved.</p>
+            </div>
+            <div class="col-md-6 text-center text-md-end mt-3 mt-md-0">
+                <div class="payment-methods">
+                    <span class="me-3 text-light">Secure Payments:</span>
+                    <img src="https://img.icons8.com/color/30/visa.png" alt="Visa" class="me-2">
+                    <img src="https://img.icons8.com/color/30/mastercard.png" alt="Mastercard" class="me-2">
+                    <img src="https://img.icons8.com/color/30/paypal.png" alt="PayPal" class="me-2">
+                    <span class="badge bg-warning text-dark me-2">MTN MOMO</span>
+                    <span class="badge bg-info text-dark">Airtel Money</span>
+                </div>
+            </div>
+        </div>
+    </div>
 </footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 <script src="/js/scripts.js"></script>
+<script>
+    // Password strength checker
+    function checkPasswordStrength(password) {
+        const strengthBar = document.getElementById('strengthBar');
+        const strengthText = document.getElementById('strengthText');
+        
+        let strength = 0;
+        let text = 'Very Weak';
+        
+        if (password.length >= 8) strength++;
+        if (password.match(/[a-z]/)) strength++;
+        if (password.match(/[A-Z]/)) strength++;
+        if (password.match(/[0-9]/)) strength++;
+        if (password.match(/[^a-zA-Z0-9]/)) strength++;
+        
+        strengthBar.className = 'strength-fill';
+        
+        switch(strength) {
+            case 0:
+            case 1:
+                strengthBar.classList.add('strength-weak');
+                text = 'Weak';
+                break;
+            case 2:
+                strengthBar.classList.add('strength-fair');
+                text = 'Fair';
+                break;
+            case 3:
+            case 4:
+                strengthBar.classList.add('strength-good');
+                text = 'Good';
+                break;
+            case 5:
+                strengthBar.classList.add('strength-strong');
+                text = 'Strong';
+                break;
+        }
+        
+        strengthText.textContent = text;
+    }
+    
+    // Add smooth animations
+    document.addEventListener('DOMContentLoaded', function() {
+        const inputs = document.querySelectorAll('.form-control');
+        inputs.forEach(input => {
+            input.addEventListener('focus', function() {
+                this.parentElement.style.transform = 'scale(1.02)';
+            });
+            
+            input.addEventListener('blur', function() {
+                this.parentElement.style.transform = 'scale(1)';
+            });
+        });
+    });
+</script>
 </body>
 </html>

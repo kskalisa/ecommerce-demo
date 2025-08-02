@@ -1,88 +1,323 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Checkout</title>
-
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"> -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout - E-Commerce</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <!-- Swiper CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css" />
+    <!-- Animate CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css">
-    <!-- <link rel="stylesheet" href="/css/styles.css"> -->
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="/css/styles.css">
     <link rel="stylesheet" href="/css/modern-styles.css">
-
-
-
-  <link rel="stylesheet" href="/css/styles.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="stylesheet" href="/css/modern-header.css">
+    
+    <style>
+        .toast-notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #28a745;
+            color: white;
+            padding: 15px 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            z-index: 9999;
+            opacity: 0;
+            transform: translateX(100%);
+            transition: all 0.3s ease;
+        }
+        .toast-notification.show {
+            opacity: 1;
+            transform: translateX(0);
+        }
+        .checkout-form .form-label {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 0.5rem;
+        }
+        .checkout-form .form-control, .checkout-form .form-select {
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            padding: 12px 16px;
+            transition: all 0.3s ease;
+        }
+        .checkout-form .form-control:focus, .checkout-form .form-select:focus {
+            border-color: #007bff;
+            box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+        }
+        .payment-method-card {
+            border: 2px solid #e9ecef;
+            border-radius: 12px;
+            padding: 20px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        .payment-method-card:hover {
+            border-color: #007bff;
+            background-color: #f8f9fa;
+        }
+        .payment-method-card.selected {
+            border-color: #007bff;
+            background-color: #e7f3ff;
+        }
+    </style>
 </head>
 <body>
 
 <div th:replace="fragments/header::siteHeader"></div>
 
 <!-- Breadcrumb -->
-<div class="breadcrumb">
-  <a th:href="@{/}">Home</a> / <a href="cart.html">Cart</a> / Checkout
+<div class="container mt-3">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a th:href="@{/}" class="text-decoration-none">Home</a></li>
+            <li class="breadcrumb-item"><a th:href="@{/cart}" class="text-decoration-none">Cart</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Checkout</li>
+        </ol>
+    </nav>
 </div>
 
-<main class="checkout-main">
-  <div class="checkout-container">
-    <!-- Delivery Information -->
-    <div class="checkout-info-box card">
-      <div class="checkout-info-header">
-        <h3>Delivery Information</h3>
-        <button class="checkout-edit-btn" onclick="alert('Edit Information')"><i class="fa-solid fa-pen"></i> Edit Information</button>
-      </div>
-      <form class="checkout-info-form" th:action="@{/checkout}" method="post" th:object="${checkoutForm}">
-
-        <label>Shipping Address:</label>
-        <input type="text" th:field="*{shippingAddress}" required>
-
-        <label>Mobile - Phone:</label>
-        <input type="text" th:field="*{phoneNumber}" required>
-
-        <label>Payment Method:</label>
-        <select th:field="*{paymentMethod}">
-          <option value="MTN MOMO">MTN MOMO</option>
-          <option value="Airtel Money">Airtel Money</option>
-          <option value="Cash on Delivery">Cash on Delivery</option>
-          <option value="Paypal">Paypal</option>
-          <option value="Credit or Debit Card">Credit or Debit Card</option>
-
-        </select><br>
-
-        <button type="submit"> Place Order</button>
-
-      </form>
-    </div>
-    <!-- Order Summary & Payment -->
-    <div class="checkout-summary-box card">
-      <div class="checkout-summary-row">
-        <input type="text" placeholder="Enter coupon code" class="checkout-coupon-input">
-        <button class="checkout-coupon-btn" onclick="alert('Coupon applied!')"><i class="fa-solid fa-tag"></i> Apply Coupon</button>
-      </div>
-      <div class="checkout-payment-details">
-        <div class="checkout-payment-title">Payment Details</div>
-        <div class="checkout-payment-options">
-          <label class="checkout-radio"><input type="radio" name="payment" disabled> Cash on Delivery</label>
-          <label class="checkout-radio"><input type="radio" name="payment" disabled> Shopcart Card</label>
-          <label class="checkout-radio"><input type="radio" name="payment" disabled> Paypal</label>
-          <label class="checkout-radio"><input type="radio" name="payment" disabled> Credit or Debit Card</label>
-          <label class="checkout-radio"><input type="radio" name="payment" checked> MTN MOMO</label>
-          <label class="checkout-radio"><input type="radio" name="payment" disabled> Airtel Money</label>
+<main class="py-4">
+    <div class="container">
+        <h2 class="mb-4 animate__animated animate__fadeIn">Checkout</h2>
+        
+        <div class="row g-4">
+            <!-- Checkout Form -->
+            <div class="col-lg-8">
+                <div class="card border-0 shadow-sm animate__animated animate__fadeIn">
+                    <div class="card-header bg-white border-bottom-0 py-3">
+                        <h4 class="mb-0"><i class="fas fa-shipping-fast me-2 text-primary"></i>Delivery Information</h4>
+                    </div>
+                    <div class="card-body p-4">
+                        <form class="checkout-form" th:action="@{/checkout}" method="post" th:object="${checkoutForm}">
+                            <div class="row g-3">
+                                <div class="col-12">
+                                    <label for="shippingAddress" class="form-label">Shipping Address *</label>
+                                    <input type="text" class="form-control" id="shippingAddress" th:field="*{shippingAddress}" 
+                                           placeholder="Enter your full shipping address" required>
+                                </div>
+                                
+                                <div class="col-md-6">
+                                    <label for="phoneNumber" class="form-label">Mobile Phone *</label>
+                                    <input type="tel" class="form-control" id="phoneNumber" th:field="*{phoneNumber}" 
+                                           placeholder="+250 XXX XXX XXX" required>
+                                </div>
+                                
+                                <div class="col-md-6">
+                                    <label for="email" class="form-label">Email Address *</label>
+                                    <input type="email" class="form-control" id="email" 
+                                           placeholder="your.email@example.com" required>
+                                </div>
+                                
+                                <div class="col-12">
+                                    <label for="paymentMethod" class="form-label">Payment Method *</label>
+                                    <select class="form-select" id="paymentMethod" th:field="*{paymentMethod}" required>
+                                        <option value="">Select Payment Method</option>
+                                        <option value="MTN MOMO">MTN MOMO</option>
+                                        <option value="Airtel Money">Airtel Money</option>
+                                        <option value="Cash on Delivery">Cash on Delivery</option>
+                                        <option value="Paypal">Paypal</option>
+                                        <option value="Credit or Debit Card">Credit or Debit Card</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="col-12 mt-4">
+                                    <button type="submit" class="btn btn-primary btn-lg w-100">
+                                        <i class="fas fa-credit-card me-2"></i>Place Order
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Order Summary -->
+            <div class="col-lg-4">
+                <div class="card border-0 shadow-sm animate__animated animate__fadeIn">
+                    <div class="card-header bg-white border-bottom-0 py-3">
+                        <h4 class="mb-0"><i class="fas fa-receipt me-2 text-success"></i>Order Summary</h4>
+                    </div>
+                    <div class="card-body p-4">
+                        <!-- Coupon Section -->
+                        <div class="mb-4">
+                            <div class="input-group">
+                                <input type="text" class="form-control" placeholder="Enter coupon code">
+                                <button class="btn btn-outline-primary" type="button" onclick="showToast('Coupon applied successfully!', 'tag')">
+                                    <i class="fas fa-tag"></i>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <!-- Payment Details -->
+                        <div class="payment-details">
+                            <h5 class="mb-3">Payment Details</h5>
+                            
+                            <div class="mb-3">
+                                <div class="payment-method-card mb-2" onclick="selectPaymentMethod(this, 'cod')">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="paymentRadio" id="cod" disabled>
+                                        <label class="form-check-label" for="cod">
+                                            <i class="fas fa-truck me-2"></i>Cash on Delivery
+                                        </label>
+                                    </div>
+                                </div>
+                                
+                                <div class="payment-method-card mb-2" onclick="selectPaymentMethod(this, 'paypal')">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="paymentRadio" id="paypal" disabled>
+                                        <label class="form-check-label" for="paypal">
+                                            <i class="fab fa-paypal me-2"></i>Paypal
+                                        </label>
+                                    </div>
+                                </div>
+                                
+                                <div class="payment-method-card mb-2" onclick="selectPaymentMethod(this, 'card')">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="paymentRadio" id="card" disabled>
+                                        <label class="form-check-label" for="card">
+                                            <i class="fas fa-credit-card me-2"></i>Credit or Debit Card
+                                        </label>
+                                    </div>
+                                </div>
+                                
+                                <div class="payment-method-card mb-2 selected" onclick="selectPaymentMethod(this, 'mtn')">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="paymentRadio" id="mtn" checked>
+                                        <label class="form-check-label" for="mtn">
+                                            <i class="fas fa-mobile-alt me-2"></i>MTN MOMO
+                                        </label>
+                                    </div>
+                                </div>
+                                
+                                <div class="payment-method-card" onclick="selectPaymentMethod(this, 'airtel')">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="paymentRadio" id="airtel" disabled>
+                                        <label class="form-check-label" for="airtel">
+                                            <i class="fas fa-mobile-alt me-2"></i>Airtel Money
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="cardHolder" class="form-label">Card Holder Name</label>
+                                <input type="text" class="form-control" id="cardHolder" value="Kalisa Mutabazi">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-        <label style="margin-top:1rem;">Email*</label>
-        <input type="text" value="Kalisa Mutabazi" class="checkout-summary-input">
-        <label>Card Holder Name*</label>
-        <input type="text" value="Kalisa Mutabazi" class="checkout-summary-input">
-      </div>
     </div>
-  </div>
 </main>
-<footer style="text-align:center;padding:2rem 0 1rem 0;color:#888;font-size:0.98rem;">
-  &copy; 2025 E-Commerce. All rights reserved.
+
+<!-- Footer -->
+<footer class="bg-dark text-white pt-5 pb-3">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-3 mb-4">
+                <h5 class="fw-bold mb-3">E-Commerce</h5>
+                <p class="text-light">Your one-stop shop for premium electronics and accessories.</p>
+                <div class="d-flex gap-3 mt-3">
+                    <a href="#" class="text-white"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" class="text-white"><i class="fab fa-twitter"></i></a>
+                    <a href="#" class="text-white"><i class="fab fa-instagram"></i></a>
+                    <a href="#" class="text-white"><i class="fab fa-youtube"></i></a>
+                </div>
+            </div>
+            <div class="col-md-3 mb-4">
+                <h5 class="fw-bold mb-3">Shop</h5>
+                <ul class="list-unstyled">
+                    <li class="mb-2"><a href="#" class="text-light text-decoration-none">Headphones</a></li>
+                    <li class="mb-2"><a href="#" class="text-light text-decoration-none">Earbuds</a></li>
+                    <li class="mb-2"><a href="#" class="text-light text-decoration-none">Speakers</a></li>
+                    <li class="mb-2"><a href="#" class="text-light text-decoration-none">Accessories</a></li>
+                </ul>
+            </div>
+            <div class="col-md-3 mb-4">
+                <h5 class="fw-bold mb-3">Support</h5>
+                <ul class="list-unstyled">
+                    <li class="mb-2"><a href="#" class="text-light text-decoration-none">Contact Us</a></li>
+                    <li class="mb-2"><a href="#" class="text-light text-decoration-none">FAQs</a></li>
+                    <li class="mb-2"><a href="#" class="text-light text-decoration-none">Shipping</a></li>
+                    <li class="mb-2"><a href="#" class="text-light text-decoration-none">Returns</a></li>
+                </ul>
+            </div>
+            <div class="col-md-3 mb-4">
+                <h5 class="fw-bold mb-3">Contact</h5>
+                <ul class="list-unstyled">
+                    <li class="mb-2 text-light"><i class="fas fa-map-marker-alt me-2"></i> 123 Commerce St, Kigali</li>
+                    <li class="mb-2 text-light"><i class="fas fa-phone me-2"></i> (078) 121-8195</li>
+                    <li class="mb-2 text-light"><i class="fas fa-envelope me-2"></i> kalisa.mutabazi@auca.com</li>
+                </ul>
+            </div>
+        </div>
+        <hr class="my-4">
+        <div class="row align-items-center">
+            <div class="col-md-6 text-center text-md-start">
+                <p class="mb-0">&copy; 2025 E-Commerce. All rights reserved.</p>
+            </div>
+            <div class="col-md-6 text-center text-md-end mt-3 mt-md-0">
+                <img src="https://via.placeholder.com/250x30" alt="Payment Methods" class="img-fluid">
+            </div>
+        </div>
+    </div>
 </footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
 <script src="/js/scripts.js"></script>
+<script>
+    // Show toast notification
+    function showToast(message, icon = 'check-circle') {
+        const toast = document.createElement('div');
+        toast.className = 'toast-notification show';
+        toast.innerHTML = `<i class="fas fa-${icon}"></i> ${message}`;
+        document.body.appendChild(toast);
+        
+        setTimeout(() => {
+            toast.classList.remove('show');
+            setTimeout(() => {
+                document.body.removeChild(toast);
+            }, 300);
+        }, 3000);
+    }
+    
+    // Select payment method
+    function selectPaymentMethod(element, method) {
+        // Remove selected class from all payment cards
+        document.querySelectorAll('.payment-method-card').forEach(card => {
+            card.classList.remove('selected');
+        });
+        
+        // Add selected class to clicked card
+        element.classList.add('selected');
+        
+        // Update radio button
+        const radio = element.querySelector('input[type="radio"]');
+        if (radio && !radio.disabled) {
+            radio.checked = true;
+        }
+    }
+    
+    // Initialize animations on page load
+    document.addEventListener('DOMContentLoaded', function() {
+        // Add fade-in animation to cards
+        const cards = document.querySelectorAll('.card');
+        cards.forEach((card, index) => {
+            setTimeout(() => {
+                card.classList.add('animate__animated', 'animate__fadeIn');
+            }, index * 100);
+        });
+    });
+</script>
 </body>
 </html>
