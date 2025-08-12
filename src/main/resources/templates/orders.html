@@ -24,44 +24,6 @@
             width: 100vw;
             overflow-x: hidden;
         }
-        .sidebar {
-            background: #fff;
-            min-height: 100vh;
-            border-right: 1.5px solid #e0e0e0;
-            width: 220px;
-            position: relative;
-            z-index: 1040;
-            transition: left 0.3s, background 0.3s, color 0.3s;
-        }
-        .sidebar .nav-link {
-            color: #222;
-            font-weight: 500;
-            border-radius: 8px;
-            margin: 4px 0;
-            padding: 12px 20px;
-            display: flex;
-            align-items: center;
-            transition: background 0.2s, color 0.2s;
-        }
-        .sidebar .nav-link.active, .sidebar .nav-link:hover {
-            background: #2563eb;
-            color: #fff;
-        }
-        .sidebar .nav-link i {
-            margin-right: 12px;
-            font-size: 1.2rem;
-        }
-        .sidebar .sidebar-title {
-            font-size: 1.5rem;
-            font-weight: bold;
-            padding: 32px 20px 24px 20px;
-            letter-spacing: 1px;
-        }
-        .sidebar .bottom-links {
-            position: absolute;
-            bottom: 32px;
-            width: 100%;
-        }
         .profile-img {
             width: 38px;
             height: 38px;
@@ -75,6 +37,7 @@
             min-height: 100vh;
             display: flex;
             flex-direction: column;
+            margin-left: 220px;
         }
         .topbar {
             background: #fff;
@@ -283,6 +246,8 @@
             }
         }
     </style>
+    <th:block th:replace="fragments/sidebar::sidebarStyles"></th:block>
+
 </head>
 <body>
 <div class="layout">

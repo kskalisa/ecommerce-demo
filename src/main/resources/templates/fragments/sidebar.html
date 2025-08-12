@@ -66,7 +66,9 @@
         min-height: 100vh;
         border-right: 1.5px solid #e0e0e0;
         width: 220px;
-        position: relative;
+        position: fixed; /* Changed from relative */
+        top: 0;           /* Sticks to top */
+        left: 0;          /* Sticks to left */
         z-index: 1040;
         transition: left 0.3s, background 0.3s, color 0.3s;
     }
