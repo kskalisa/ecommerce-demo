@@ -10,6 +10,7 @@ import com.ecommerce.assignment.repository.OrderRepo;
 import com.ecommerce.assignment.repository.UserRepo;
 import com.ecommerce.assignment.service.IProductService;
 
+import com.ecommerce.assignment.util.EOrderStatus;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -64,7 +65,7 @@ public class CheckoutController {
         Order order = new Order();
         order.setUser(user);
         order.setOrderDate(LocalDateTime.now());
-        order.setStatus("Pending");
+        order.setStatus(EOrderStatus.CONFIRMED);
         order.setShippingAddress(checkout.getShippingAddress());
         order.setPhoneNumber(checkout.getPhoneNumber());
         order.setPaymentMethod(checkout.getPaymentMethod());

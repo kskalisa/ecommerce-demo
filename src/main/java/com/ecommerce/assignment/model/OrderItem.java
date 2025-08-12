@@ -22,4 +22,6 @@ public class OrderItem extends AbstractBaseEntity {
     @ManyToOne
     private Order order;
 
+
+
 }

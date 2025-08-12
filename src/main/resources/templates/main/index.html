@@ -86,64 +86,14 @@
     </div>
     
     <div class="row g-4">
-        <div class="col-6 col-md-4 col-lg-2">
+        <div class="col-6 col-md-4 col-lg-2" th:each="cat : ${categories}">
             <div class="category-card-modern">
                 <div class="category-icon-wrapper">
-                    <i class="fa-solid fa-couch"></i>
+                    <i class="fa-solid fa-tag"></i>
                 </div>
-                <h5>Furniture</h5>
-                <p>320 items</p>
-                <a href="#" class="stretched-link"></a>
-            </div>
-        </div>
-        <div class="col-6 col-md-4 col-lg-2">
-            <div class="category-card-modern">
-                <div class="category-icon-wrapper">
-                    <i class="fa-solid fa-headphones"></i>
-                </div>
-                <h5>Headphones</h5>
-                <p>220 items</p>
-                <a href="#" class="stretched-link"></a>
-            </div>
-        </div>
-        <div class="col-6 col-md-4 col-lg-2">
-            <div class="category-card-modern">
-                <div class="category-icon-wrapper">
-                    <i class="fa-solid fa-shoe-prints"></i>
-                </div>
-                <h5>Shoes</h5>
-                <p>320 items</p>
-                <a href="#" class="stretched-link"></a>
-            </div>
-        </div>
-        <div class="col-6 col-md-4 col-lg-2">
-            <div class="category-card-modern">
-                <div class="category-icon-wrapper">
-                    <i class="fa-solid fa-bag-shopping"></i>
-                </div>
-                <h5>Bags</h5>
-                <p>220 items</p>
-                <a href="#" class="stretched-link"></a>
-            </div>
-        </div>
-        <div class="col-6 col-md-4 col-lg-2">
-            <div class="category-card-modern">
-                <div class="category-icon-wrapper">
-                    <i class="fa-solid fa-laptop"></i>
-                </div>
-                <h5>Laptops</h5>
-                <p>320 items</p>
-                <a href="#" class="stretched-link"></a>
-            </div>
-        </div>
-        <div class="col-6 col-md-4 col-lg-2">
-            <div class="category-card-modern">
-                <div class="category-icon-wrapper">
-                    <i class="fa-solid fa-book"></i>
-                </div>
-                <h5>Books</h5>
-                <p>220 items</p>
-                <a href="#" class="stretched-link"></a>
+                <h5 th:text="${cat.name}">Category</h5>
+                <p th:text="${cat.products != null ? cat.products.size() : 0} + ' items'">0 items</p>
+                <a th:href="@{/ (category=${cat.name})}" class="stretched-link"></a>
             </div>
         </div>
     </div>
@@ -162,8 +112,8 @@
 <section class="container my-5 py-4">
     <div class="row mb-4 align-items-center">
         <div class="col-md-8">
-            <h2 class="fw-bold">Headphones For You!</h2>
-            <p class="text-muted">Discover premium audio experiences tailored to your lifestyle</p>
+            <h2 class="fw-bold">Products</h2>
+            <p class="text-muted">Browse all products or filter by category</p>
         </div>
         <div class="col-md-4 text-md-end">
             <div class="d-flex justify-content-md-end gap-2">
@@ -176,10 +126,9 @@
             </div>
         </div>
     </div>
-    
     <div class="swiper product-swiper">
         <div class="swiper-wrapper">
-            <div class="swiper-slide" th:each="prod : ${products}">
+            <div class="swiper-slide" th:each="prod : ${products}" th:if="${#strings.isEmpty(category) or prod.category.name == category}">
                 <div class="product-card-modern">
                     <div class="product-badge" th:if="${prod.price < 100}">Sale</div>
                     <div class="wishlist-btn">
@@ -190,7 +139,7 @@
                     </a>
                     <div class="product-info p-3">
                         <div class="d-flex justify-content-between align-items-center mb-2">
-                            <div class="product-category">Headphones</div>
+                            <div class="product-category" th:text="${prod.category.name}">Category</div>
                             <div class="product-rating">
                                 <i class="fas fa-star"></i>
                                 <span>4.9</span>
@@ -208,6 +157,7 @@
                 </div>
             </div>
         </div>
+        <br><br><br>
         <div class="swiper-pagination"></div>
     </div>
 </section>

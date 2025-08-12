@@ -382,80 +382,157 @@
             </div>
         </div>
         <div class="container-fluid">
-            <!-- Product Filters Row -->
-            <div class="product-filters-row mb-3">
-                <input type="text" class="form-control me-2" placeholder="Search product">
-                <select class="form-select me-2" style="min-width:120px;">
-                    <option>All Product</option>
-                    <option>Jackets</option>
-                    <option>Shoes</option>
-                </select>
-                <select class="form-select me-2" style="min-width:120px;">
-                    <option>Default</option>
-                    <option>Price: Low to High</option>
-                    <option>Price: High to Low</option>
-                </select>
-                <button class="btn btn-filter me-2"><i class="bi bi-funnel"></i> Filter</button>
-                <button class="btn btn-add ms-auto" data-bs-toggle="modal" data-bs-target="#productModal">
-                    <i class="bi bi-plus-lg me-2"></i>Add product
-                </button>
+
+            <!-- Flash Messages -->
+            <div th:if="${success}" class="alert alert-success alert-dismissible fade show" role="alert">
+                <i class="bi bi-check-circle me-2"></i>
+                <span th:text="${success}"></span>
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
             </div>
-            <!-- Category/Status/Price/Warehouse Filters -->
-            <div class="row mb-4 g-2">
-                <div class="col-12 col-sm-6 col-md-3">
-                    <select class="form-select">
-                        <option>Category</option>
-                        <option>Jackets</option>
-                        <option>Shoes</option>
+
+            <div th:if="${error}" class="alert alert-danger alert-dismissible fade show" role="alert">
+                <i class="bi bi-exclamation-triangle me-2"></i>
+                <span th:text="${error}"></span>
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+
+            <!-- Enhanced Filters -->
+            <form method="get" th:action="@{/products/filter}" id="filterForm">
+                <div class="product-filters-row mb-3">
+                    <input type="text" class="form-control me-2" name="search"
+                           placeholder="Search product" th:value="${search}">
+
+                    <select class="form-select me-2" name="categoryId" style="min-width:120px;">
+                        <option value="">All Categories</option>
+                        <option th:each="cat : ${categories}"
+                                th:value="${cat.id}"
+                                th:text="${cat.name}"
+                                th:selected="${cat.id == selectedCategoryId}">
+                        </option>
                     </select>
+
+                    <select class="form-select me-2" name="stockState" style="min-width:120px;">
+                        <option value="">All Status</option>
+                        <option th:each="state : ${stockStates}"
+                                th:value="${state}"
+                                th:text="${state}"
+                                th:selected="${state == selectedStockState}">
+                        </option>
+                    </select>
+
+                    <input type="number" class="form-control me-2" name="minPrice"
+                           placeholder="Min Price" th:value="${minPrice}" style="max-width:120px;">
+
+                    <input type="number" class="form-control me-2" name="maxPrice"
+                           placeholder="Max Price" th:value="${maxPrice}" style="max-width:120px;">
+
+                    <button type="submit" class="btn btn-filter me-2">
+                        <i class="bi bi-funnel"></i> Filter
+                    </button>
+
+                    <a href="/products/All" class="btn btn-outline-secondary me-2">
+                        <i class="bi bi-arrow-clockwise"></i> Reset
+                    </a>
+
+                    <button type="button" class="btn btn-success me-2" onclick="exportProducts()">
+                        <i class="bi bi-download"></i> Export
+                    </button>
+
                 </div>
-                <div class="col-12 col-sm-6 col-md-3">
-                    <select class="form-select">
-                        <option>All Status</option>
-                        <option>Active</option>
-                        <option>Inactive</option>
+
+                <!-- Sorting Options -->
+                <div class="d-flex align-items-center mb-3">
+                    <label class="me-2">Sort by:</label>
+                    <select class="form-select me-2" name="sortBy" style="max-width:150px;">
+                        <option value="productName" th:selected="${sortBy == 'productName'}">Name</option>
+                        <option value="price" th:selected="${sortBy == 'price'}">Price</option>
+                        <option value="quantity" th:selected="${sortBy == 'quantity'}">Quantity</option>
+                        <option value="createdAt" th:selected="${sortBy == 'createdAt'}">Date Added</option>
                     </select>
+
+                    <select class="form-select me-2" name="sortDir" style="max-width:120px;">
+                        <option value="asc" th:selected="${sortDir == 'asc'}">Ascending</option>
+                        <option value="desc" th:selected="${sortDir == 'desc'}">Descending</option>
+                    </select>
+
+                    <select class="form-select" name="size" style="max-width:100px;" onchange="this.form.submit()">
+                        <option value="5" th:selected="${size == 5}">5</option>
+                        <option value="10" th:selected="${size == 10}">10</option>
+                        <option value="20" th:selected="${size == 20}">20</option>
+                        <option value="50" th:selected="${size == 50}">50</option>
+                    </select>
+                    <span class="ms-2">per page</span>
                 </div>
-                <div class="col-12 col-sm-6 col-md-3">
-                    <select class="form-select">
-                        <option>$50 - $100</option>
-                        <option>$100 - $200</option>
-                    </select>
-                </div>
-                <div class="col-12 col-sm-6 col-md-3">
-                    <select class="form-select">
-                        <option>All Store</option>
-                        <option>Warehouse 1</option>
-                        <option>Warehouse 2</option>
-                    </select>
+            </form>
+            <button type="button" class="btn btn-add ms-auto" data-bs-toggle="modal" data-bs-target="#productModal">
+                <i class="bi bi-plus-lg me-2"></i>Add product
+            </button>
+
+            <!-- Bulk Actions Panel -->
+            <div class="bulk-actions" id="bulkActions">
+                <div class="d-flex align-items-center justify-content-between">
+                    <span id="selectedCount">0 products selected</span>
+                    <div>
+                        <button class="btn btn-sm btn-success me-2" onclick="performBulkAction('activate')">
+                            <i class="bi bi-check-circle"></i> Activate
+                        </button>
+                        <button class="btn btn-sm btn-warning me-2" onclick="performBulkAction('deactivate')">
+                            <i class="bi bi-pause-circle"></i> Deactivate
+                        </button>
+                        <button class="btn btn-sm btn-danger" onclick="performBulkAction('delete')">
+                            <i class="bi bi-trash"></i> Delete
+                        </button>
+                    </div>
+
                 </div>
             </div>
+            <br>
             <!-- Products Table -->
             <div class="table-responsive">
                 <table class="table product-table">
                     <thead>
                     <tr>
+                        <th class="checkbox-column">
+                            <input type="checkbox" id="selectAll" class="form-check-input">
+                        </th>
                         <th>Product Name</th>
                         <th>Purchase Unit Price</th>
-                        <th>Products</th>
+                        <th>Quantity</th>
                         <th>Status</th>
                         <th>Actions</th>
                     </tr>
                     </thead>
                     <tbody>
-                    <!-- Example rows, repeat or use Thymeleaf th:each for dynamic data -->
                     <tr th:each="prod : ${products}">
+                        <td>
+                            <input type="checkbox" class="form-check-input product-checkbox"
+                                   th:value="${prod.id}">
+                        </td>
                         <td>
                             <div class="d-flex align-items-center">
                                 <img th:src="@{'/images/' + ${prod.image}}" class="product-img" alt="Product Image">
                                 <div>
-                                    <div style="font-weight:600;" th:text="${prod.productName}">Product Name</div>
-                                    <div style="font-size:0.92rem; color:#888;" th:text="${prod.description}">Warm clothing</div>
+                                    <div style="font-weight:600;"
+                                         th:text="${prod.productName}"
+                                         contenteditable="true"
+                                         th:attr="data-field='productName', data-id=${prod.id}"
+                                         class="editable-field">Product Name</div>
+                                    <div style="font-size:0.92rem; color:#888;" th:text="${prod.description}">Description</div>
                                 </div>
                             </div>
                         </td>
-                        <td th:text="${prod.price}">0.0</td>
-                        <td th:text="${prod.quantity}">0</td>
+                        <td>
+                            <span contenteditable="true"
+                                  th:text="${prod.price}"
+                                  th:attr="data-field='price', data-id=${prod.id}"
+                                  class="editable-field">0.0</span>
+                        </td>
+                        <td>
+                            <span contenteditable="true"
+                                  th:text="${prod.quantity}"
+                                  th:attr="data-field='quantity', data-id=${prod.id}"
+                                  class="editable-field">0</span>
+                        </td>
                         <td>
                             <span class="status-label"
                                   th:text="${prod.stockState}"
@@ -507,6 +584,7 @@
                     </tbody>
                 </table>
             </div>
+
         </div>
     </div>
 </div>
