@@ -21,6 +21,7 @@ import java.util.UUID;
 @RequestMapping("/user")
 @RequiredArgsConstructor
 public class UserDashboardController {
+
     @PostMapping("/orders/cancel/{orderId}")
     public String cancelOrder(@PathVariable Long orderId, Principal principal, Model model) {
         if (principal == null) {
