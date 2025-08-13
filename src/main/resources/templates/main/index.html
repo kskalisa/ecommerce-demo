@@ -81,19 +81,31 @@
             <p class="text-muted">Explore our most popular product categories</p>
         </div>
         <div class="col-md-4 text-md-end">
-            <a href="#" class="btn btn-outline-primary rounded-pill">View All Categories</a>
+            <div class="dropdown">
+                <a class="btn btn-outline-primary rounded-pill dropdown-toggle" href="#" id="dropdownMenuButton" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    View All Categories
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <li th:each="cat : ${categories}">
+                        <a class="dropdown-item" th:href="@{/ (category=${cat.name})}" th:text="${cat.name}"></a>
+                    </li>
+                </ul>
+            </div>
+            <!-- Removed custom style for .category-dropdown-item to avoid conflicts -->
+                </ul>
+            </div>
         </div>
     </div>
     
     <div class="row g-4">
-        <div class="col-6 col-md-4 col-lg-2" th:each="cat : ${categories}">
-            <div class="category-card-modern">
+        <div class="col-6 col-md-4 col-lg-2" th:each="cat,iterStat : ${categories}" th:if="${iterStat.index} < 5">
+            <div class="category-card-modern" th:classappend="${cat.name == category} ? 'border-primary border-2'">
                 <div class="category-icon-wrapper">
                     <i class="fa-solid fa-tag"></i>
                 </div>
                 <h5 th:text="${cat.name}">Category</h5>
                 <p th:text="${cat.products != null ? cat.products.size() : 0} + ' items'">0 items</p>
-                <a th:href="@{/ (category=${cat.name})}" class="stretched-link"></a>
+                <a th:href="@{/ (category=${cat.name})}" class="stretched-link" th:aria-current="${cat.name == category} ? 'page' : null"></a>
             </div>
         </div>
     </div>
@@ -108,12 +120,12 @@
     </div>
 </section>
 
-<!-- Headphones For You! -->
+
 <section class="container my-5 py-4">
     <div class="row mb-4 align-items-center">
         <div class="col-md-8">
-            <h2 class="fw-bold">Products</h2>
-            <p class="text-muted">Browse all products or filter by category</p>
+            <h2 class="fw-bold text-gradient">Discover Your Next Favorite!</h2>
+            <p class="text-muted">Uncover top picks and trending products tailored for you. Filter by category to find exactly what you love, and enjoy a seamless shopping experience!</p>
         </div>
         <div class="col-md-4 text-md-end">
             <div class="d-flex justify-content-md-end gap-2">
@@ -126,39 +138,41 @@
             </div>
         </div>
     </div>
-    <div class="swiper product-swiper">
-        <div class="swiper-wrapper">
-            <div class="swiper-slide" th:each="prod : ${products}" th:if="${#strings.isEmpty(category) or prod.category.name == category}">
-                <div class="product-card-modern">
-                    <div class="product-badge" th:if="${prod.price < 100}">Sale</div>
-                    <div class="wishlist-btn">
-                        <i class="far fa-heart"></i>
-                    </div>
-                    <a th:href="@{/product-details/{productId}(productId=${prod.id})}" class="product-img">
-                        <img th:src="@{'/images/' + ${prod.image}}" alt="Product Image" class="img-fluid">
-                    </a>
-                    <div class="product-info p-3">
-                        <div class="d-flex justify-content-between align-items-center mb-2">
-                            <div class="product-category" th:text="${prod.category.name}">Category</div>
-                            <div class="product-rating">
-                                <i class="fas fa-star"></i>
-                                <span>4.9</span>
-                            </div>
+    <div id="live-product-results">
+        <div class="swiper product-swiper">
+            <div class="swiper-wrapper">
+                <div class="swiper-slide" th:each="prod : ${products}">
+                    <div class="product-card-modern">
+                        <div class="product-badge" th:if="${prod.price < 100}">Sale</div>
+                        <div class="wishlist-btn">
+                            <i class="far fa-heart"></i>
                         </div>
-                        <h5 class="product-title" th:text="${prod.productName}">Product Name</h5>
-                        <p class="product-description" th:text="${prod.description}">Product description here</p>
-                        <div class="d-flex justify-content-between align-items-center mt-3">
-                            <div class="product-price fw-bold" th:text="'$' + ${prod.price}">$89.00</div>
-                            <a th:href="@{/product-details/{productId}(productId=${prod.id})}" class="btn btn-primary btn-sm rounded-pill add-to-cart">
-                                <i class="fas fa-shopping-cart me-1"></i> Add
-                            </a>
+                        <a th:href="@{/product-details/{productId}(productId=${prod.id})}" class="product-img">
+                            <img th:src="@{'/images/' + ${prod.image}}" alt="Product Image" class="img-fluid">
+                        </a>
+                        <div class="product-info p-3">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <div class="product-category" th:text="${prod.category.name}">Category</div>
+                                <div class="product-rating">
+                                    <i class="fas fa-star"></i>
+                                    <span>4.9</span>
+                                </div>
+                            </div>
+                            <h5 class="product-title" th:text="${prod.productName}">Product Name</h5>
+                            <p class="product-description" th:text="${prod.description}">Product description here</p>
+                            <div class="d-flex justify-content-between align-items-center mt-3">
+                                <div class="product-price fw-bold" th:text="'$' + ${prod.price}">$89.00</div>
+                                <a th:href="@{/product-details/{productId}(productId=${prod.id})}" class="btn btn-primary btn-sm rounded-pill add-to-cart">
+                                    <i class="fas fa-shopping-cart me-1"></i> Add
+                                </a>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
+            <br><br><br>
+            <div class="swiper-pagination"></div>
         </div>
-        <br><br><br>
-        <div class="swiper-pagination"></div>
     </div>
 </section>
 
@@ -413,7 +427,73 @@
                 prevEl: '.swiper-button-prev',
             },
         });
-        
+
+        // Live Search Functionality
+        const searchInput = document.getElementById('live-search-input');
+        const productResults = document.getElementById('live-product-results');
+        let searchTimeout;
+
+        // Create loading spinner
+        const loadingSpinner = document.createElement('div');
+        loadingSpinner.innerHTML = `<div class="d-flex justify-content-center align-items-center py-5"><div class="spinner-border text-primary" role="status"><span class="visually-hidden">Loading...</span></div></div>`;
+
+        function showLoading() {
+            productResults.innerHTML = loadingSpinner.innerHTML;
+        }
+
+        function renderProducts(products) {
+            if (!products || products.length === 0) {
+                productResults.innerHTML = '<div class="text-center py-5"><h4>No products found.</h4></div>';
+                return;
+            }
+            let html = '<div class="swiper product-swiper"><div class="swiper-wrapper">';
+            products.forEach(prod => {
+                html += `
+                <div class="swiper-slide">
+                    <div class="product-card-modern">
+                        ${prod.price < 100 ? '<div class="product-badge">Sale</div>' : ''}
+                        <div class="wishlist-btn"><i class="far fa-heart"></i></div>
+                        <a href="/product-details/${prod.id}" class="product-img">
+                            <img src="/images/${prod.image}" alt="Product Image" class="img-fluid">
+                        </a>
+                        <div class="product-info p-3">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <div class="product-category">${prod.category ? prod.category.name : ''}</div>
+                                <div class="product-rating"><i class="fas fa-star"></i> <span>4.9</span></div>
+                            </div>
+                            <h5 class="product-title">${prod.productName}</h5>
+                            <p class="product-description">${prod.description}</p>
+                            <div class="d-flex justify-content-between align-items-center mt-3">
+                                <div class="product-price fw-bold">$${prod.price}</div>
+                                <a href="/product-details/${prod.id}" class="btn btn-primary btn-sm rounded-pill add-to-cart"><i class="fas fa-shopping-cart me-1"></i> Add</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>`;
+            });
+            html += '</div><br><br><br><div class="swiper-pagination"></div></div>';
+            productResults.innerHTML = html;
+            // Re-initialize Swiper after updating DOM
+            new Swiper('.product-swiper', {
+                slidesPerView: 1,
+                spaceBetween: 20,
+                pagination: { el: '.swiper-pagination', clickable: true },
+                breakpoints: { 640: { slidesPerView: 2 }, 768: { slidesPerView: 3 }, 1024: { slidesPerView: 4 } }
+            });
+        }
+
+        searchInput.addEventListener('input', function() {
+            clearTimeout(searchTimeout);
+            const query = this.value.trim();
+            searchTimeout = setTimeout(() => {
+                showLoading();
+                fetch(`/search/products?query=${encodeURIComponent(query)}`)
+                    .then(res => res.json())
+                    .then(data => renderProducts(data))
+                    .catch(() => productResults.innerHTML = '<div class="text-center py-5"><h4>Error loading products.</h4></div>');
+            }, 300);
+        });
+
         // Products Swiper
         const productSwiper = new Swiper('.product-swiper', {
             slidesPerView: 1,
@@ -438,13 +518,21 @@
                 },
             },
         });
-        
+
+        // Dropdown on hover for categories
+
+        // Ensure dropdown links always navigate
+        document.querySelectorAll('.category-dropdown-item').forEach(function(link) {
+            link.addEventListener('click', function(e) {
+                e.preventDefault(); // Prevent dropdown from closing before navigation
+                window.location.href = this.getAttribute('href');
+            });
+        });
         // Add to cart functionality
         document.querySelectorAll('.add-to-cart').forEach(function(btn) {
             btn.addEventListener('click', function(e) {
                 e.preventDefault();
                 const productName = this.closest('.product-card-modern').querySelector('.product-title').textContent;
-                
                 // Create a toast notification
                 const toast = document.createElement('div');
                 toast.className = 'position-fixed bottom-0 end-0 p-3';
@@ -461,14 +549,13 @@
                     </div>
                 `;
                 document.body.appendChild(toast);
-                
                 // Remove toast after 3 seconds
                 setTimeout(() => {
                     toast.remove();
                 }, 3000);
             });
         });
-        
+
         // Wishlist functionality
         document.querySelectorAll('.wishlist-btn').forEach(function(btn) {
             btn.addEventListener('click', function() {

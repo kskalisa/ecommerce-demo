@@ -15,14 +15,45 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     
     <style>
+        /* Recent Orders & Activity Section */
+        .dashboard-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2rem;
+        }
+        .dashboard-row > .dashboard-card {
+            flex: 1 1 0;
+            min-width: 320px;
+            max-width: 100%;
+        }
+        @media (max-width: 991px) {
+            .dashboard-row {
+                flex-direction: column;
+                gap: 1.5rem;
+            }
+        }
+        .dashboard-card .card-header {
+            border-bottom: 1px solid #e9ecef;
+            margin-bottom: 1rem;
+        }
+        .dashboard-card .card-body {
+            padding-top: 0;
+        }
+        .recent-order {
+            margin-bottom: 1.25rem;
+        }
+        .order-timeline {
+            margin-top: 0.5rem;
+        }
         .dashboard-card {
             border: none;
             border-radius: 15px;
             box-shadow: 0 8px 25px rgba(0,0,0,0.1);
             transition: all 0.3s ease;
             overflow: hidden;
+            margin-bottom: 2rem;
         }
-        
+
         .dashboard-card:hover {
             transform: translateY(-5px);
             box-shadow: 0 15px 35px rgba(0,0,0,0.15);
@@ -52,6 +83,18 @@
             background: linear-gradient(180deg, #2c3e50 0%, #34495e 100%);
             min-height: 100vh;
             padding: 2rem 0;
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 260px;
+            z-index: 1000;
+            height: 100vh;
+            box-shadow: 2px 0 12px rgba(44,62,80,0.08);
+        }
+        .main-content {
+            margin-left: 260px;
+            padding: 2rem 2rem 2rem 2rem;
+            min-height: 100vh;
         }
         
         .sidebar .nav-link {
@@ -164,58 +207,48 @@
     </style>
 </head>
 <body class="bg-light">
-
-<div th:replace="fragments/header::siteHeader"></div>
-
-<div class="container-fluid">
-    <div class="row">
-        <!-- Sidebar -->
-        <div class="col-lg-3 col-md-4 p-0">
-            <div class="sidebar">
-                <div class="text-center mb-4">
-                    <div class="profile-avatar mx-auto mb-3">
-                        <span th:text="${user.name != null ? user.name.substring(0,1).toUpperCase() : 'U'}">U</span>
-                    </div>
-                    <h5 class="text-white mb-1" th:text="${user.name ?: 'User Name'}">John Doe</h5>
-                    <small class="text-light" th:text="${user.email ?: 'user@example.com'}">john@example.com</small>
-                </div>
-                
-                <nav class="nav flex-column">
-                    <a class="nav-link active" href="#dashboard" data-section="dashboard">
-                        <i class="fas fa-tachometer-alt me-2"></i>Dashboard
-                    </a>
-                    <a class="nav-link" href="#orders" data-section="orders">
-                        <i class="fas fa-box me-2"></i>My Orders
-                        <span class="notification-badge">3</span>
-                    </a>
-                    <a class="nav-link" href="#profile" data-section="profile">
-                        <i class="fas fa-user me-2"></i>Profile Settings
-                    </a>
-                    <a class="nav-link" href="#addresses" data-section="addresses">
-                        <i class="fas fa-map-marker-alt me-2"></i>Addresses
-                    </a>
-                    <a class="nav-link" href="#wishlist" data-section="wishlist">
-                        <i class="fas fa-heart me-2"></i>Wishlist
-                        <span class="notification-badge">5</span>
-                    </a>
-                    <a class="nav-link" href="#payments" data-section="payments">
-                        <i class="fas fa-credit-card me-2"></i>Payment Methods
-                    </a>
-                    <a class="nav-link" href="#notifications" data-section="notifications">
-                        <i class="fas fa-bell me-2"></i>Notifications
-                        <span class="notification-badge">2</span>
-                    </a>
-                    <a class="nav-link" href="#support" data-section="support">
-                        <i class="fas fa-headset me-2"></i>Support
-                    </a>
-                </nav>
-            </div>
+<div class="sidebar">
+    <div class="text-center mb-4">
+        <div class="profile-avatar mx-auto mb-3">
+            <span th:text="${user.username != null ? user.username.substring(0,1).toUpperCase() : 'U'}">U</span>
         </div>
-        
-        <!-- Main Content -->
-        <div class="col-lg-9 col-md-8 p-4">
-            <!-- Dashboard Section -->
-            <div id="dashboard" class="content-section">
+        <h5 class="text-white mb-1" th:text="${user.username ?: 'User Name'}">John Doe</h5>
+        <small class="text-light" th:text="${user.email ?: 'user@example.com'}">john@example.com</small>
+    </div>
+    <nav class="nav flex-column">
+        <a class="nav-link active" href="#dashboard" data-section="dashboard">
+            <i class="fas fa-tachometer-alt me-2"></i>Dashboard
+        </a>
+        <a class="nav-link" href="#orders" data-section="orders">
+            <i class="fas fa-box me-2"></i>My Orders
+            <span class="notification-badge">3</span>
+        </a>
+        <a class="nav-link" href="#profile" data-section="profile">
+            <i class="fas fa-user me-2"></i>Profile Settings
+        </a>
+        <a class="nav-link" href="#addresses" data-section="addresses">
+            <i class="fas fa-map-marker-alt me-2"></i>Addresses
+        </a>
+        <a class="nav-link" href="#wishlist" data-section="wishlist">
+            <i class="fas fa-heart me-2"></i>Wishlist
+            <span class="notification-badge">5</span>
+        </a>
+        <a class="nav-link" href="#payments" data-section="payments">
+            <i class="fas fa-credit-card me-2"></i>Payment Methods
+        </a>
+        <a class="nav-link" href="#notifications" data-section="notifications">
+            <i class="fas fa-bell me-2"></i>Notifications
+            <span class="notification-badge">2</span>
+        </a>
+        <a class="nav-link" href="#support" data-section="support">
+            <i class="fas fa-headset me-2"></i>Support
+        </a>
+    </nav>
+</div>
+
+<div class="main-content">
+    <!-- Dashboard Section -->
+    <div id="dashboard" class="content-section">
                 <div class="d-flex justify-content-between align-items-center mb-4">
                     <h2 class="fw-bold">Dashboard Overview</h2>
                     <div class="text-muted">
@@ -316,59 +349,57 @@
                 </div>
                 
                 <!-- Recent Orders & Activity -->
-                <div class="row">
-                    <div class="col-lg-8 mb-4">
-                        <div class="dashboard-card">
-                            <div class="card-header bg-white border-0 pb-0">
-                                <h5 class="fw-bold mb-0">Recent Orders</h5>
+                <div class="dashboard-row">
+                    <section class="dashboard-card" aria-labelledby="recent-orders-title">
+                        <div class="card-header bg-white border-0 pb-0">
+                            <h5 class="fw-bold mb-0" id="recent-orders-title">Recent Orders</h5>
+                        </div>
+                        <div class="card-body">
+                            <div th:if="${#lists.isEmpty(recentOrders)}" class="text-center text-muted py-4">
+                                <i class="fas fa-box-open fa-2x mb-2"></i>
+                                <p>No recent orders found.</p>
                             </div>
-                            <div class="card-body">
-                                <div class="recent-order" th:each="order : ${recentOrders}">
-                                    <div class="d-flex justify-content-between align-items-center">
-                                        <div>
-                                            <h6 class="mb-1">Order #<span th:text="${order.id}">12345</span></h6>
-                                            <p class="mb-1 text-muted" th:text="${#temporals.format(order.orderDate, 'MMM dd, yyyy')}">Jan 10, 2025</p>
-                                            <span class="badge bg-success" th:text="${order.status}">Delivered</span>
-                                        </div>
-                                        <div class="text-end">
-                                            <h6 class="mb-1" th:text="'$' + ${order.totalAmount}">$299.99</h6>
-                                            <a th:href="@{/order-confirmation(id=${order.id})}" class="btn btn-sm btn-outline-primary">View</a>
-                                        </div>
+                            <div th:each="order : ${recentOrders}" class="recent-order">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <h6 class="mb-1">Order #<span th:text="${order.id}">12345</span></h6>
+                                        <p class="mb-1 text-muted" th:text="${#temporals.format(order.orderDate, 'MMM dd, yyyy')}">Jan 10, 2025</p>
+                                    </div>
+                                    <div class="text-end">
+                                        <h6 class="mb-1" th:text="'$' + ${order.totalAmount}">$299.99</h6>
+                                        <a th:href="@{/order-confirmation(id=${order.id})}" class="btn btn-sm btn-outline-primary" aria-label="View order details">View</a>
                                     </div>
                                 </div>
-                                <div class="text-center mt-3">
-                                    <a href="#orders" class="btn btn-primary" data-section="orders">View All Orders</a>
+                            </div>
+                            <div class="text-center mt-3">
+                                <a href="#orders" class="btn btn-primary" data-section="orders" aria-label="View all orders">View All Orders</a>
+                            </div>
+                        </div>
+                    </section>
+                    <section class="dashboard-card" aria-labelledby="order-activity-title">
+                        <div class="card-header bg-white border-0 pb-0">
+                            <h5 class="fw-bold mb-0" id="order-activity-title">Order Activity</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="order-timeline">
+                                <div class="timeline-item">
+                                    <h6 class="mb-1">Order Shipped</h6>
+                                    <p class="mb-1 text-muted">Order #12345 has been shipped</p>
+                                    <small class="text-muted">2 hours ago</small>
+                                </div>
+                                <div class="timeline-item">
+                                    <h6 class="mb-1">Payment Confirmed</h6>
+                                    <p class="mb-1 text-muted">Payment for order #12344 confirmed</p>
+                                    <small class="text-muted">1 day ago</small>
+                                </div>
+                                <div class="timeline-item">
+                                    <h6 class="mb-1">Order Placed</h6>
+                                    <p class="mb-1 text-muted">New order #12343 placed successfully</p>
+                                    <small class="text-muted">3 days ago</small>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    
-                    <div class="col-lg-4 mb-4">
-                        <div class="dashboard-card">
-                            <div class="card-header bg-white border-0 pb-0">
-                                <h5 class="fw-bold mb-0">Order Activity</h5>
-                            </div>
-                            <div class="card-body">
-                                <div class="order-timeline">
-                                    <div class="timeline-item">
-                                        <h6 class="mb-1">Order Shipped</h6>
-                                        <p class="mb-1 text-muted">Order #12345 has been shipped</p>
-                                        <small class="text-muted">2 hours ago</small>
-                                    </div>
-                                    <div class="timeline-item">
-                                        <h6 class="mb-1">Payment Confirmed</h6>
-                                        <p class="mb-1 text-muted">Payment for order #12344 confirmed</p>
-                                        <small class="text-muted">1 day ago</small>
-                                    </div>
-                                    <div class="timeline-item">
-                                        <h6 class="mb-1">Order Placed</h6>
-                                        <p class="mb-1 text-muted">New order #12343 placed successfully</p>
-                                        <small class="text-muted">3 days ago</small>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    </section>
                 </div>
             </div>
             
@@ -421,6 +452,10 @@
                                                 <button class="btn btn-outline-secondary" onclick="downloadInvoice()">
                                                     <i class="fas fa-download"></i>
                                                 </button>
+                                               <!-- Cancel button for eligible orders -->
+                                               <button class="btn btn-outline-danger cancel-order-btn" th:if="${order.status != null and order.status.name() != 'CANCELLED' and order.status.name() != 'DELIVERED'}" th:attr="data-order-id=${order.id}">
+                                                   <i class="fas fa-times"></i> Cancel
+                                               </button>
                                             </div>
                                         </td>
                                     </tr>
@@ -443,28 +478,12 @@
                             </div>
                             <div class="card-body">
                                 <form>
-                                    <div class="row">
-                                        <div class="col-md-6 mb-3">
-                                            <label class="form-label fw-medium">First Name</label>
-                                            <input type="text" class="form-control" th:value="${user.firstName}" placeholder="John">
-                                        </div>
-                                        <div class="col-md-6 mb-3">
-                                            <label class="form-label fw-medium">Last Name</label>
-                                            <input type="text" class="form-control" th:value="${user.lastName}" placeholder="Doe">
-                                        </div>
-                                    </div>
+                                    <!-- Removed firstName and lastName fields: not present in User entity -->
                                     <div class="mb-3">
                                         <label class="form-label fw-medium">Email Address</label>
                                         <input type="email" class="form-control" th:value="${user.email}" placeholder="john@example.com">
                                     </div>
-                                    <div class="mb-3">
-                                        <label class="form-label fw-medium">Phone Number</label>
-                                        <input type="tel" class="form-control" th:value="${user.phone}" placeholder="+250 123 456 789">
-                                    </div>
-                                    <div class="mb-3">
-                                        <label class="form-label fw-medium">Date of Birth</label>
-                                        <input type="date" class="form-control" th:value="${user.dateOfBirth}">
-                                    </div>
+                                    <!-- Removed phone and dateOfBirth fields: not present in User entity -->
                                     <button type="submit" class="btn btn-primary">
                                         <i class="fas fa-save me-2"></i>Save Changes
                                     </button>
@@ -480,7 +499,7 @@
                             </div>
                             <div class="card-body text-center">
                                 <div class="profile-avatar mx-auto mb-3" style="width: 120px; height: 120px; font-size: 3rem;">
-                                    <span th:text="${user.name != null ? user.name.substring(0,1).toUpperCase() : 'U'}">J</span>
+                                    <span th:text="${user.username != null ? user.username.substring(0,1).toUpperCase() : 'U'}">J</span>
                                 </div>
                                 <button class="btn btn-outline-primary mb-2">
                                     <i class="fas fa-camera me-2"></i>Change Photo
@@ -572,6 +591,29 @@
     function downloadInvoice() {
         alert('Invoice download functionality would be implemented here');
     }
+
+    // Cancel order AJAX for dashboard
+    document.addEventListener('DOMContentLoaded', function() {
+        document.querySelectorAll('.cancel-order-btn').forEach(function(btn) {
+            btn.addEventListener('click', function() {
+                const orderId = this.getAttribute('data-order-id');
+                if (!confirm('Are you sure you want to cancel this order?')) return;
+                fetch(`/orders/cancel/${orderId}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' }
+                })
+                .then(res => res.text())
+                .then(msg => {
+                    // Update status badge and remove cancel button
+                    const statusBadge = this.closest('tr').querySelector('span.badge');
+                    if (statusBadge) statusBadge.textContent = 'CANCELLED';
+                    this.remove();
+                    alert(msg);
+                })
+                .catch(() => alert('Error cancelling order.'));
+            });
+        });
+    });
 </script>
 </body>
 </html>

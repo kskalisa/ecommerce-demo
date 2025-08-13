@@ -46,6 +46,12 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
+    public User findByEmail(String email) {
+        Optional<User> optionalUser = userRepo.findByEmail(email);
+        return optionalUser.orElse(null);
+    }
+
+    @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
 
         System.out.println("=== UserService loadUserByUsername called with: " + email);

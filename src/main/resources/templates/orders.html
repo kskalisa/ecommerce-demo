@@ -330,9 +330,16 @@
                         </td>
 
                         <td>
-        <span th:text="${order.status}">
-            ● Status
+        <span th:classappend="'badge ' + 
+        (${order.status} == 'CONFIRMED' ? 'bg-primary' : 
+        (${order.status} == 'PROCESSING' ? 'bg-info text-dark' : 
+        (${order.status} == 'SHIPPED' ? 'bg-secondary' : 
+        (${order.status} == 'DELIVERED' ? 'bg-success' : 
+        (${order.status} == 'CANCELLED' ? 'bg-danger' : 'bg-secondary')))))"
+        th:text="${order.status}">
+        ● Status
         </span>
+        
                         </td>
                     </tr>
                     </tbody>

@@ -24,7 +24,21 @@ public class CategoryService implements ICategoryService{
 
     @Override
     public Category createCategory(Category theCategory) {
-        return categoryRepo.save(theCategory);
+        Optional<Category> existingOpt = categoryRepo.findByName(theCategory.getName());
+        if (existingOpt.isPresent()) {
+            Category existing = existingOpt.get();
+            // If products are provided, add them to the existing category's products
+            if (theCategory.getProducts() != null && !theCategory.getProducts().isEmpty()) {
+                if (existing.getProducts() == null) {
+                    existing.setProducts(theCategory.getProducts());
+                } else {
+                    existing.getProducts().addAll(theCategory.getProducts());
+                }
+            }
+            return categoryRepo.save(existing);
+        } else {
+            return categoryRepo.save(theCategory);
+        }
     }
 
     @Override

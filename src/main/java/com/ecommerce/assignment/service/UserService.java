@@ -11,6 +11,8 @@ public interface UserService extends UserDetailsService {
     boolean isEmailAlreadyRegistered(String email);
     User findByUsername(String username);
 
+    User findByEmail(String email);
+
 
 
 }

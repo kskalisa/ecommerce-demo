@@ -103,7 +103,7 @@ public class AuthController {
             }
         }
 
-        return "redirect:/checkout";
+        return "redirect:/user/dashboard";
     }
 
     @GetMapping("/login-fail")

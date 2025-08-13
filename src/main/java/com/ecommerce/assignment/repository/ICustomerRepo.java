@@ -18,4 +18,5 @@ public interface ICustomerRepo extends JpaRepository<Customer, UUID> {
     Optional<Customer> findCustomerByIdAndActive(@Param("id") UUID id, Boolean active);
     Optional<Customer> findByEmailAndActive(String email, Boolean active);
     List<Customer> findAllByActive(Boolean active);
+    
 }
